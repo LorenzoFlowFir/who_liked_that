@@ -25,8 +25,8 @@ import { CommonModule } from '@angular/common';
 })
 export class HomePage implements OnInit {
   public CLIENT_ID = '72a2f504b28f416ead2d3cc6bc1e6aa8';
-  public REDIRECT_URI = `http://localhost:8100/`;
-  //public REDIRECT_URI = `https://test-playlist-game.vercel.app/index.html`;
+  //public REDIRECT_URI = `http://localhost:8100/`;
+  public REDIRECT_URI = `com.flowfir.wholiked://callback`;
   public SCOPES = [
     'user-library-read',
     'user-modify-playback-state',
@@ -62,5 +62,7 @@ export class HomePage implements OnInit {
       //     this.randomlikeService.displayLikedTrack();
       //   });
     }
+    console.log('hashParams', hashParams);
+    
   }
 }
