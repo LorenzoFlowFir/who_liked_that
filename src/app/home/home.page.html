@@ -11,11 +11,26 @@
     </ion-toolbar>
   </ion-header>
 
-  <div style="text-align:right">
-    <ion-button color="success">
-      parametres
-    </ion-button>
-  </div>
+  <ion-content class="ion-padding">
+    <ion-button color="success" (click)="setOpen(true)">Parametres</ion-button>
+    <ion-modal [isOpen]="isModalOpen">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Parametres</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="setOpen(false)">Fermer</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <p>
+           Ouais les parametres pour le son tout ça !!!!
+          </p>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  </ion-content>
 
   <div id="container">
     <div class="row">

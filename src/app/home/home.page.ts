@@ -5,6 +5,8 @@ import {
   IonTitle,
   IonContent,
   IonButton,
+  IonButtons,
+  IonModal,
 } from '@ionic/angular/standalone';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
@@ -21,6 +23,8 @@ import { CommonModule } from '@angular/common';
     IonContent,
     IonButton,
     CommonModule,
+    IonButtons,
+    IonModal,
   ],
 })
 export class HomePage implements OnInit {
@@ -64,5 +68,10 @@ export class HomePage implements OnInit {
     }
     console.log('hashParams', hashParams);
     
+  }
+  isModalOpen = false;
+
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
   }
 }
