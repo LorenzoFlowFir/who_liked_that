@@ -9,11 +9,27 @@
     <ion-toolbar>
       <ion-title size="large">Blank</ion-title>
     </ion-toolbar>
+    
   </ion-header>
 
+
   <div id="container">
-    <div class="row">
-      <div class="col-12 text-center mb-5" id="main">
+    <div class="row" >
+      <!-- Photo de profil -->
+      <div id="profile_picture">
+        <ion-img src="assets/avatar_rihanna.png"></ion-img>
+      </div>
+      <!-- Pseudo du joueur -->
+      <div id="profile_name">
+        <ion-text>Rihanna</ion-text>
+      </div>
+      <div class="col-12 text-center mb-5 "  id="profile_description">
+        <!-- Niveau du joueur -->
+        <p>Level 1</p>
+        <!-- Progression niveau -->
+        <div class="xp-bar">
+          <div class="xp-fill"></div>
+        </div>
         <!-- Bouton de connexion -->
         <ion-button
           *ngIf="isDisconnected"
@@ -26,6 +42,7 @@
         </ion-button>
         <!-- <app-test *ngIf="!isDisconnected"></app-test> -->
         <span *ngIf="!isDisconnected">Connecté</span>
+        <ion-img id="spotify_logo" src="assets/Spotify_logo.png"></ion-img>
       </div>
     </div>
   </div>

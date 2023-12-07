@@ -5,6 +5,8 @@ import {
   IonTitle,
   IonContent,
   IonButton,
+  IonImg,
+  IonText,
 } from '@ionic/angular/standalone';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
@@ -21,6 +23,8 @@ import { CommonModule } from '@angular/common';
     IonContent,
     IonButton,
     CommonModule,
+    IonImg,
+    IonText,
   ],
 })
 export class HomePage implements OnInit {
