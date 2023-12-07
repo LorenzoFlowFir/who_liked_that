@@ -12,15 +12,18 @@
   </ion-header>
 
   <ion-content class="ion-padding">
-    <ion-button color="success" (click)="setOpen(true)">
-      Parametres</ion-button>
+    <div class="ion-text-end">
+      <ion-button color="success" (click)="setOpen(true)">
+        Parametres
+      </ion-button>
+    </div>
     <ion-modal [isOpen]="isModalOpen">
       <ng-template>
         <ion-header>
           <ion-toolbar>
             <ion-title>Parametres</ion-title>
             <ion-buttons slot="end">
-              <ion-button (click)="setOpen(false)">Fermer</ion-button>
+              <ion-button (click)="setOpen(false)" color="danger">Fermer</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
