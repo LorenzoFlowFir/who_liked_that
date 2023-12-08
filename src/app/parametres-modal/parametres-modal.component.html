@@ -1,0 +1,16 @@
+<ng-template>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Parametres</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="setOpen(false)" color="danger">Fermer</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-label>Volume de la musique</ion-label>
+    <ion-range aria-label="range-musique" [value]="50" [pin]="true" color="success"></ion-range>
+    <ion-label>Volume des effets</ion-label>
+    <ion-range aria-label="range-effets" [value]="50" [pin]="true" color="success"></ion-range>
+  </ion-content>
+</ng-template>

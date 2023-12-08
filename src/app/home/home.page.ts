@@ -12,7 +12,8 @@ import {
 } from '@ionic/angular/standalone';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
-import { RangeCustomEvent } from '@ionic/angular';
+import { RangeCustomEvent } from '@ionic/angular'
+import { ParametresModalComponent } from '../parametres-modal/parametres-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -30,6 +31,7 @@ import { RangeCustomEvent } from '@ionic/angular';
     IonModal,
     IonRange,
     IonLabel,
+    ParametresModalComponent
   ],
 })
 export class HomePage implements OnInit {
