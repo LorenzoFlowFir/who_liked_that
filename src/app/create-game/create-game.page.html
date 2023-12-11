@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>CREATION DE PARTIE</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <form>
+    <ion-item>
+      <ion-label position="floating">Nom de la partie</ion-label>
+      <ion-input type="text"  name="gameName" required></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label position="floating">Mot de passe</ion-label>
+      <ion-input type="password" name="password" required></ion-input>
+    </ion-item>
+    
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" type="submit" color="success">Valider</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block" color="danger">Annuler</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
