@@ -5,9 +5,11 @@ import {
   IonTitle,
   IonContent,
   IonButton,
+  IonIcon,
 } from '@ionic/angular/standalone';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
+import { RandLikedSongComponent } from '../rand-liked-song/rand-liked-song.component';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +23,8 @@ import { CommonModule } from '@angular/common';
     IonContent,
     IonButton,
     CommonModule,
+    IonIcon,
+    RandLikedSongComponent,
   ],
 })
 export class HomePage implements OnInit {
@@ -43,7 +47,7 @@ export class HomePage implements OnInit {
   }&redirect_uri=${this.REDIRECT_URI}&scope=${this.SCOPES.join(
     '%20'
   )}&response_type=token&show_dialog=true`;
-
+  public accessToken: any;
   public isDisconnected = true;
 
   public loginWithSpotify() {
@@ -53,7 +57,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     const hashParams = new URLSearchParams(window.location.hash.substr(1));
     if (hashParams.has('access_token')) {
-      const accessToken = hashParams.get('access_token');
+      this.accessToken = hashParams.get('access_token');
       this.isDisconnected = false;
 
       // this.randomlikeService

@@ -1,0 +1,28 @@
+<div class="container">
+  <div id="likedmusic" class="stock">
+    <div class="center">
+      <h2>10 titres liké aléatoire</h2>
+    </div>
+    <!-- <div id="player">
+            Boutons de contrôle 
+            <button id="pre" class="btn btn-outline-secondary me-2 player">
+              <img src="prev.png" alt="Précédent" />
+            </button>
+            <button id="play" class="btn btn-outline-secondary me-2 player">
+              <img src="play.png" alt="Lire" />
+            </button>
+            <button id="next" class="btn btn-outline-secondary player">
+              <img src="next.png" alt="Suivant" />
+            </button>
+            
+        </div>-->
+    <div class="center" id="liked-track"></div>
+    <ion-spinner
+      class="center"
+      *ngIf="loader"
+      style="width: 50px"
+      id="spinner"
+      color="primary"
+    ></ion-spinner>
+  </div>
+</div>
