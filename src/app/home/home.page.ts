@@ -10,6 +10,7 @@ import {
 import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
 import { RandLikedSongComponent } from '../rand-liked-song/rand-liked-song.component';
+import { LikedSongService } from '../services/liked-song/liked-song.service';
 
 @Component({
   selector: 'app-home',
@@ -29,8 +30,8 @@ import { RandLikedSongComponent } from '../rand-liked-song/rand-liked-song.compo
 })
 export class HomePage implements OnInit {
   public CLIENT_ID = '72a2f504b28f416ead2d3cc6bc1e6aa8';
-  //public REDIRECT_URI = `http://localhost:8100/`;
-  public REDIRECT_URI = `com.flowfir.wholiked://callback`;
+  public REDIRECT_URI = `http://localhost:8100/`;
+  //public REDIRECT_URI = `com.flowfir.wholiked://callback`;
   public SCOPES = [
     'user-library-read',
     'user-modify-playback-state',
@@ -50,9 +51,12 @@ export class HomePage implements OnInit {
   public accessToken: any;
   public isDisconnected = true;
 
+
+  constructor(public randomlikeService: LikedSongService) {}
   public loginWithSpotify() {
     window.location.href = this.authorizeUrl;
   }
+
 
   ngOnInit() {
     const hashParams = new URLSearchParams(window.location.hash.substr(1));
@@ -66,7 +70,7 @@ export class HomePage implements OnInit {
       //     this.randomlikeService.displayLikedTrack();
       //   });
     }
-    console.log('hashParams', hashParams);
-    
+    // TODO Ajouté les info de l'utilisateur
+    this.randomlikeService.InfoPersonnelUtilisateur(this.accessToken);
   }
 }

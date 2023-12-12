@@ -66,8 +66,6 @@ export class LikedSongService {
       total = data.total;
       offset += 50;
     }
-    console.log('c bon');
-
     this.loader = false;
     console.log(`Nombre de titres aimés : ${total}`);
   }
@@ -169,5 +167,16 @@ export class LikedSongService {
         uris: [`spotify:track:${this.playlist[o].id}`],
       });
     });*/
+  }
+
+  public async InfoPersonnelUtilisateur(accessToken: string) {
+    this.spotifyWebApi.setAccessToken(accessToken);
+
+    try {
+      const userProfile = await this.spotifyWebApi.getMe();
+      console.log('Informations de l\'utilisateur :', userProfile);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des informations de l\'utilisateur :', error);
+    }
   }
 }
