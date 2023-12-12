@@ -1,6 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { Track } from '../../models/track.model';
+import { Observable } from 'rxjs';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  addDoc,
+  doc,
+  getDoc,
+  setDoc,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -10,10 +20,12 @@ export class LikedSongService {
   public allTracks: Track[] = [];
   public allPlaylists: Track[] = [];
   public loader = false;
+  public firestore: Firestore = inject(Firestore);
 
   constructor() {}
 
   public spotifyWebApi = new SpotifyWebApi();
+
   public async addToQueue(trackId: any) {
     const hashParams = new URLSearchParams(window.location.hash.substr(1));
     let accessToken = hashParams.get('access_token');
@@ -41,12 +53,14 @@ export class LikedSongService {
     }
   }
 
-  public async getLikedTracksAndPlayRandomTrack(accessToken: any) {
+  public async getLikedTracks(accessToken: any) {
     let offset = 0;
     let total = 1;
+    let allTracks: Track[] = [];
+
     this.spotifyWebApi.setAccessToken(accessToken);
     this.loader = true;
-    while (this.allTracks.length < total) {
+    while (allTracks.length < total) {
       const data = await this.spotifyWebApi.getMySavedTracks({
         limit: 50,
         offset,
@@ -55,128 +69,76 @@ export class LikedSongService {
 
       const tracks = data.items.map((item) => ({
         id: item.track.id,
-        cover:
-          item.track.album.images && item.track.album.images[0]
-            ? item.track.album.images[0].url
-            : 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/XEU.jpg/1200px-XEU.jpg',
+        cover: item.track.album?.images[0]
+          ? item.track.album.images[0].url
+          : 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/XEU.jpg/1200px-XEU.jpg',
         name: item.track.name,
         artist: item.track.artists[0].name,
       }));
-      this.allTracks = this.allTracks.concat(tracks);
+      allTracks = allTracks.concat(tracks);
       total = data.total;
       offset += 50;
     }
     this.loader = false;
     console.log(`Nombre de titres aimés : ${total}`);
+    return allTracks;
   }
 
-  public saveTrackInFile() {
-    localStorage.setItem('likedTracks', JSON.stringify(this.allTracks));
-  }
-
-  public async displayLikedTrack() {
-    this.playlist = [];
-    let randomTrack;
-    for (let i = 0; i < 10; i++) {
-      randomTrack =
-        this.allTracks[Math.floor(Math.random() * this.allTracks.length)];
-      this.playlist.push(randomTrack);
-    }
-
-    const likedTrackDiv = document.getElementById('liked-track');
-
-    if (likedTrackDiv) {
-      likedTrackDiv.innerHTML = ' ';
-    } else {
-      // Gérer le cas où l'élément n'existe pas
-      console.error('Element avec l\'id "liked-track" n\'a pas été trouvé');
-    }
-    // Vider les détails de la this.playlist précédente
-
-    for (const music of this.playlist) {
-      const p = document.createElement('p');
-      const trackData = await this.spotifyWebApi.getTrack(music.id);
-      const img = document.createElement('img');
-      img.src = trackData.album.images[0].url;
-      img.alt = `Cover de ${music.name} - ${music.artist}`;
-      img.style.width = '50px';
-      p.appendChild(img);
-      p.appendChild(document.createTextNode(`${music.name} - ${music.artist}`));
-      // Bouton pour mettre la musique en file d'attente sur Spotify
-      // const divtools = document.createElement('div');
-      // divtools.id = 'tools';
-
-      // const addToQueueButton = document.createElement('ion-button');
-      // addToQueueButton.addEventListener('click', () => {
-      //   this.addToQueue(music.id);
-      // });
-      // const queueImg = document.createElement('ion-icon');
-      // queueImg.name = 'ionic'; // Votre chemin d'accès à l'image ici
-      // queueImg.style.width = '25px';
-
-      // addToQueueButton.appendChild(queueImg);
-      // divtools.appendChild(addToQueueButton);
-
-      // // Bouton pour jouer la musique sur Spotify
-      // const playButton = document.createElement('ion-button');
-      // playButton.addEventListener('click', () => {
-      //   this.spotifyWebApi.play({
-      //     uris: [`spotify:track:${music.id}`],
-      //   });
-      // });
-      // const playImg = document.createElement('ion-icon');
-      // playImg.name = 'ionic'; // Votre chemin d'accès à l'image ici
-
-      // playImg.classList.add('tools-track');
-      // playImg.style.width = '25px';
-      // playButton.appendChild(playImg);
-      // divtools.appendChild(playButton);
-      // p.appendChild(divtools);
-
-      likedTrackDiv?.appendChild(p);
-    }
-
-    const btnRefrshLike = document.createElement('ion-button');
-    btnRefrshLike.classList.add('btn');
-    btnRefrshLike.classList.add('btn-primary');
-    btnRefrshLike.textContent = "Charger d'autres musiques";
-    btnRefrshLike.id = 'reload-liked';
-    btnRefrshLike.addEventListener('click', () => this.displayLikedTrack());
-    likedTrackDiv?.appendChild(btnRefrshLike);
-
-    /*
-    // Jouer le titre aimé aléatoire
-    let o = 0;
-
-    document.getElementById('pre').addEventListener('click', () => {
-      o--;
-      this.appComponent.spotifyWebApi.play({
-        uris: [`spotify:track:${this.playlist[o].id}`],
-      });
-    });
-
-    document.getElementById('next').addEventListener('click', () => {
-      o++;
-      this.appComponent.spotifyWebApi.play({
-        uris: [`spotify:track:${this.playlist[o].id}`],
-      });
-    });
-
-    document.getElementById('play').addEventListener('click', () => {
-      this.appComponent.spotifyWebApi.play({
-        uris: [`spotify:track:${this.playlist[o].id}`],
-      });
-    });*/
-  }
-
-  public async InfoPersonnelUtilisateur(accessToken: string) {
+  public async getNumberOfLikedTracks(accessToken: string): Promise<number> {
     this.spotifyWebApi.setAccessToken(accessToken);
 
     try {
-      const userProfile = await this.spotifyWebApi.getMe();
-      console.log('Informations de l\'utilisateur :', userProfile);
+      const response = await this.spotifyWebApi.getMySavedTracks({
+        limit: 1, // Nous mettons limit à 1 car nous avons seulement besoin du total
+      });
+      return response.total; // Retourne le nombre total de titres aimés
     } catch (error) {
-      console.error('Erreur lors de la récupération des informations de l\'utilisateur :', error);
+      console.error(
+        'Erreur lors de la récupération du nombre de titres aimés :',
+        error
+      );
+      return 0; // Retourne 0 en cas d'erreur
     }
   }
+
+  // public async displayLikedTrack(allTracks: Track[]) {
+  //   this.playlist = [];
+  //   let randomTrack;
+  //   for (let i = 0; i < 10; i++) {
+  //     randomTrack = allTracks[Math.floor(Math.random() * allTracks.length)];
+  //     this.playlist.push(randomTrack);
+  //   }
+
+  //   const likedTrackDiv = document.getElementById('liked-track');
+
+  //   if (likedTrackDiv) {
+  //     likedTrackDiv.innerHTML = ' ';
+  //   } else {
+  //     // Gérer le cas où l'élément n'existe pas
+  //     console.error('Element avec l\'id "liked-track" n\'a pas été trouvé');
+  //   }
+  //   // Vider les détails de la this.playlist précédente
+
+  //   for (const music of this.playlist) {
+  //     const p = document.createElement('p');
+  //     const trackData = await this.spotifyWebApi.getTrack(music.id);
+  //     const img = document.createElement('img');
+  //     img.src = trackData.album.images[0].url;
+  //     img.alt = `Cover de ${music.name} - ${music.artist}`;
+  //     img.style.width = '50px';
+  //     p.appendChild(img);
+  //     p.appendChild(document.createTextNode(`${music.name} - ${music.artist}`));
+  //     likedTrackDiv?.appendChild(p);
+  //   }
+
+  //   const btnRefrshLike = document.createElement('ion-button');
+  //   btnRefrshLike.classList.add('btn');
+  //   btnRefrshLike.classList.add('btn-primary');
+  //   btnRefrshLike.textContent = "Charger d'autres musiques";
+  //   btnRefrshLike.id = 'reload-liked';
+  //   btnRefrshLike.addEventListener('click', () =>
+  //     this.displayLikedTrack(allTracks)
+  //   );
+  //   likedTrackDiv?.appendChild(btnRefrshLike);
+  // }
 }

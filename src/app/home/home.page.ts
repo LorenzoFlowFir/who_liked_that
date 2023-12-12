@@ -11,6 +11,7 @@ import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
 import { RandLikedSongComponent } from '../rand-liked-song/rand-liked-song.component';
 import { LikedSongService } from '../services/liked-song/liked-song.service';
+import { UserInfoService } from '../services/user-info/user-info.service';
 
 @Component({
   selector: 'app-home',
@@ -51,12 +52,13 @@ export class HomePage implements OnInit {
   public accessToken: any;
   public isDisconnected = true;
 
-
-  constructor(public randomlikeService: LikedSongService) {}
+  constructor(
+    public randomlikeService: LikedSongService,
+    public userInfoService: UserInfoService
+  ) {}
   public loginWithSpotify() {
     window.location.href = this.authorizeUrl;
   }
-
 
   ngOnInit() {
     const hashParams = new URLSearchParams(window.location.hash.substr(1));
@@ -70,7 +72,21 @@ export class HomePage implements OnInit {
       //     this.randomlikeService.displayLikedTrack();
       //   });
     }
-    // TODO Ajouté les info de l'utilisateur
-    this.randomlikeService.InfoPersonnelUtilisateur(this.accessToken);
+    this.userInfoService
+      .getInfoPersonnelUtilisateur(this.accessToken)
+      .then(async (userProfile) => {
+        const user = await this.userInfoService.CreateUser(userProfile);
+        if (user instanceof Error) {
+          console.error('Une erreur est survenue :', user);
+        } else {
+          const utilisateurExiste =
+            await this.userInfoService.VerifierUtilisateurExiste(user.id);
+          if (utilisateurExiste) {
+            this.userInfoService.GetUserInfoFromDB(user.id);
+          } else {
+            this.userInfoService.AddUserInDB(user);
+          }
+        }
+      });
   }
 }

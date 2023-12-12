@@ -23,10 +23,25 @@ export class RandLikedSongComponent implements OnInit {
 
   ngOnInit() {
     this.randomLikeService
-      .getLikedTracksAndPlayRandomTrack(this.accessToken)
-      .then(() => {
-        this.randomLikeService.displayLikedTrack();
+      .getNumberOfLikedTracks(this.accessToken)
+      .then((numberOfLikedTracks) => {
+        console.log(numberOfLikedTracks);
+      })
+      .catch((error) => {
+        console.error(
+          'Erreur lors de la récupération du nombre de titres aimés :',
+          error
+        );
       });
-    console.log(this.randomLikeService.loader);
+    this.randomLikeService
+      .getLikedTracks(this.accessToken)
+      .then((allTracks) => {
+        console.log(allTracks);
+      });
+
+    // .then(() => {
+    //   this.randomLikeService.displayLikedTrack();
+    // });
+    //console.log(this.randomLikeService.loader);
   }
 }
