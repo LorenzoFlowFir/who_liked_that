@@ -11,12 +11,15 @@ import {
   getDoc,
   setDoc,
 } from '@angular/fire/firestore';
+import { User } from '../../models/user.model';
+import { Playlist } from '../../models/playlist.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LikedSongService {
-  public playlist: Track[] = [];
+  public playlist: Playlist | undefined;
+  public newPlaylist: Track[] = [];
   public allTracks: Track[] = [];
   public allPlaylists: Track[] = [];
   public loader = false;
@@ -84,6 +87,88 @@ export class LikedSongService {
     return allTracks;
   }
 
+  //Verifie que l'utilisateur n'a pas un document dans la collection Playlist
+  public async VerifierPlaylistExiste(idUtilisateur: string) {
+    try {
+      const docRef = doc(
+        this.firestore,
+        'Playlist',
+        `playlist_${idUtilisateur}`
+      );
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        //console.log('Document data:', docSnap.data());
+        return true;
+      } else {
+        //console.log("Ce joueur n'existe pas!");
+        return false;
+      }
+    } catch (error) {
+      console.error("Erreur lors de la vérification de l'utilisateur :", error);
+      return false; // Il est préférable de renvoyer false plutôt que l'erreur elle-même
+    }
+  }
+
+  //Créer une Playlist
+  public async CreatePlaylist(user: User, liked_song: Track[]) {
+    try {
+      const playlist: Playlist = {
+        user_id: user.id,
+        liked_song: liked_song,
+      };
+      this.playlist = playlist;
+      return playlist;
+    } catch (error) {
+      console.error('Erreur lors de la création de la playlist :', error);
+      return new Error('Erreur lors de la création de la playlist');
+    }
+  }
+
+  //Créer un document dans la collection Playlist
+  public async AddPlaylistInDB(playlist: Playlist) {
+    try {
+      // Créez une référence au document avec l'ID spécifique
+      const docRef = doc(
+        this.firestore,
+        'Playlist',
+        `playlist_${playlist.user_id}`
+      );
+
+      // Utilisez setDoc pour créer le document avec les données de l'utilisateur
+      await setDoc(docRef, playlist);
+
+      console.log('Document written with ID: ', `playlist_${playlist.user_id}`);
+      return true;
+    } catch (error) {
+      console.error("Erreur lors de la création de l'utilisateur :", error);
+      return false;
+    }
+  }
+
+  //Récupere les infos de l'utilisateur depuis la collection Playlist
+  public async GetPlaylistFromDB(
+    idUtilisateur: string
+  ): Promise<Playlist | boolean> {
+    try {
+      const docRef = doc(
+        this.firestore,
+        'Playlist',
+        `playlist_${idUtilisateur}`
+      );
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log('Document data (from db):', docSnap.data());
+        return docSnap.data() as Playlist;
+      } else {
+        console.log('No such document!');
+        return false;
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'utilisateur :", error);
+      return false;
+    }
+  }
+
   public async getNumberOfLikedTracks(accessToken: string): Promise<number> {
     this.spotifyWebApi.setAccessToken(accessToken);
 
@@ -102,11 +187,11 @@ export class LikedSongService {
   }
 
   // public async displayLikedTrack(allTracks: Track[]) {
-  //   this.playlist = [];
+  //   this.newPlaylist = [];
   //   let randomTrack;
   //   for (let i = 0; i < 10; i++) {
   //     randomTrack = allTracks[Math.floor(Math.random() * allTracks.length)];
-  //     this.playlist.push(randomTrack);
+  //     this.newPlaylist.push(randomTrack);
   //   }
 
   //   const likedTrackDiv = document.getElementById('liked-track');
@@ -117,9 +202,9 @@ export class LikedSongService {
   //     // Gérer le cas où l'élément n'existe pas
   //     console.error('Element avec l\'id "liked-track" n\'a pas été trouvé');
   //   }
-  //   // Vider les détails de la this.playlist précédente
+  //   // Vider les détails de la this.newPlaylist précédente
 
-  //   for (const music of this.playlist) {
+  //   for (const music of this.newPlaylist) {
   //     const p = document.createElement('p');
   //     const trackData = await this.spotifyWebApi.getTrack(music.id);
   //     const img = document.createElement('img');

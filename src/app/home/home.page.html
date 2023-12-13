@@ -25,9 +25,16 @@
           Se connecter avec Spotify
         </ion-button>
         <!-- <app-test *ngIf="!isDisconnected"></app-test> -->
-        <app-rand-liked-song
+        <app-user-info
           *ngIf="!isDisconnected"
           [accessToken]="accessToken"
+          (userChanged)="onUserChanged($event)"
+        ></app-user-info>
+        <app-rand-liked-song
+          *ngIf="!isDisconnected && user"
+          [accessToken]="accessToken"
+          [user]="user"
+          (playlistChanged)="onPlaylistChanged($event)"
         ></app-rand-liked-song>
       </div>
     </div>

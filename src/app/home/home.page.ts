@@ -10,8 +10,9 @@ import {
 import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
 import { RandLikedSongComponent } from '../rand-liked-song/rand-liked-song.component';
-import { LikedSongService } from '../services/liked-song/liked-song.service';
-import { UserInfoService } from '../services/user-info/user-info.service';
+import { UserInfoComponent } from '../user-info/user-info.component';
+import { User } from '../models/user.model';
+import { Playlist } from '../models/playlist.model';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +28,7 @@ import { UserInfoService } from '../services/user-info/user-info.service';
     CommonModule,
     IonIcon,
     RandLikedSongComponent,
+    UserInfoComponent,
   ],
 })
 export class HomePage implements OnInit {
@@ -51,13 +53,19 @@ export class HomePage implements OnInit {
   )}&response_type=token&show_dialog=true`;
   public accessToken: any;
   public isDisconnected = true;
-
-  constructor(
-    public randomlikeService: LikedSongService,
-    public userInfoService: UserInfoService
-  ) {}
+  public user: User | undefined;
+  public playlist: Playlist | undefined;
+  constructor() {}
   public loginWithSpotify() {
     window.location.href = this.authorizeUrl;
+  }
+
+  onUserChanged(newUser: User) {
+    this.user = newUser;
+  }
+
+  onPlaylistChanged(newPlaylist: Playlist) {
+    this.playlist = newPlaylist;
   }
 
   ngOnInit() {
@@ -65,28 +73,6 @@ export class HomePage implements OnInit {
     if (hashParams.has('access_token')) {
       this.accessToken = hashParams.get('access_token');
       this.isDisconnected = false;
-
-      // this.randomlikeService
-      //   .getLikedTracksAndPlayRandomTrack(accessToken)
-      //   .then(() => {
-      //     this.randomlikeService.displayLikedTrack();
-      //   });
     }
-    this.userInfoService
-      .getInfoPersonnelUtilisateur(this.accessToken)
-      .then(async (userProfile) => {
-        const user = await this.userInfoService.CreateUser(userProfile);
-        if (user instanceof Error) {
-          console.error('Une erreur est survenue :', user);
-        } else {
-          const utilisateurExiste =
-            await this.userInfoService.VerifierUtilisateurExiste(user.id);
-          if (utilisateurExiste) {
-            this.userInfoService.GetUserInfoFromDB(user.id);
-          } else {
-            this.userInfoService.AddUserInDB(user);
-          }
-        }
-      });
   }
 }
