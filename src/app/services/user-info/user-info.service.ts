@@ -11,6 +11,7 @@ import {
   getDoc,
   setDoc,
 } from '@angular/fire/firestore';
+import { SocketService } from '../socket/socket.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class UserInfoService {
   public user: User | undefined;
   firestore: Firestore = inject(Firestore);
 
-  constructor() {}
+  constructor(private socketService: SocketService) {}
 
   //Récupere les infos de l'utilisateur depuis son compte Spotify
   public async getInfoPersonnelUtilisateur(accessToken: string) {
@@ -41,6 +42,10 @@ export class UserInfoService {
   //Créer un utilisateur
   public async CreateUser(userProfile: any): Promise<User | Error> {
     try {
+      const imageUrl =
+        userProfile.images[0]?.url ||
+        'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624';
+
       const user: User = {
         id: userProfile.id,
         nom: userProfile.display_name,
@@ -51,7 +56,7 @@ export class UserInfoService {
         nb_victoires: 0,
         nb_defaites: 0,
         niveau_joueur: 0,
-        photo_profil: userProfile.images[0].url,
+        photo_profil: imageUrl,
         profil_spotify: userProfile.external_urls.spotify,
         type: userProfile.type,
         uri: userProfile.uri,
@@ -62,7 +67,11 @@ export class UserInfoService {
       this.user = user;
       return user;
     } catch (error) {
-      console.error("Erreur lors de la création de l'utilisateur :", error);
+      console.error(
+        "Erreur lors de la création de l'utilisateur :",
+        error,
+        userProfile
+      );
       return new Error("Erreur lors de la création de l'utilisateur");
     }
   }
@@ -109,6 +118,8 @@ export class UserInfoService {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         console.log('Document data (from db):', docSnap.data());
+        this.socketService.registerUser(this.user?.nom ?? 'Un utilisateur');
+
         return docSnap.data();
       } else {
         console.log('No such document!');

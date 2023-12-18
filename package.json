@@ -31,6 +31,7 @@
     "@ionic/angular": "^7.5.0",
     "ionicons": "^7.2.1",
     "rxjs": "~7.8.0",
+    "socket.io-client": "^4.7.2",
     "spotify-web-api-js": "^1.5.2",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"

@@ -2,6 +2,7 @@ import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { LikedSongService } from '../services/liked-song/liked-song.service';
 import { UserInfoService } from '../services/user-info/user-info.service';
 import { User } from '../models/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-info',

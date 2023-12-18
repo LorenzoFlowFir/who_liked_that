@@ -1,16 +1,4 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title> Blank </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div id="container">
     <div class="row">
       <div class="col-12 text-center mb-5" id="main">
@@ -36,6 +24,11 @@
           [user]="user"
           (playlistChanged)="onPlaylistChanged($event)"
         ></app-rand-liked-song>
+        <ion-button [href]="['/create-party']" *ngIf="!isDisconnected">
+          Créer une Partie
+        </ion-button>
+
+        <app-join-party-button *ngIf="!isDisconnected"></app-join-party-button>
       </div>
     </div>
   </div>

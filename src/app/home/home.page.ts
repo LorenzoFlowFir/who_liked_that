@@ -13,6 +13,8 @@ import { RandLikedSongComponent } from '../rand-liked-song/rand-liked-song.compo
 import { UserInfoComponent } from '../user-info/user-info.component';
 import { User } from '../models/user.model';
 import { Playlist } from '../models/playlist.model';
+import { SocketService } from '../services/socket/socket.service';
+import { JoinPartyButtonComponent } from '../join-party-button/join-party-button.component';
 
 @Component({
   selector: 'app-home',
@@ -29,6 +31,7 @@ import { Playlist } from '../models/playlist.model';
     IonIcon,
     RandLikedSongComponent,
     UserInfoComponent,
+    JoinPartyButtonComponent,
   ],
 })
 export class HomePage implements OnInit {
@@ -55,7 +58,9 @@ export class HomePage implements OnInit {
   public isDisconnected = true;
   public user: User | undefined;
   public playlist: Playlist | undefined;
-  constructor() {}
+
+  constructor(private socketService: SocketService) {}
+
   public loginWithSpotify() {
     window.location.href = this.authorizeUrl;
   }
@@ -74,5 +79,10 @@ export class HomePage implements OnInit {
       this.accessToken = hashParams.get('access_token');
       this.isDisconnected = false;
     }
+    this.socketService.listen('testEvent').subscribe((data) => {
+      console.log(data);
+    });
+
+    this.socketService.emit('testEvent', { message: 'Hello from client!' });
   }
 }

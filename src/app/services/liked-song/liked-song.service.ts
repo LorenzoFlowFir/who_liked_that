@@ -186,44 +186,44 @@ export class LikedSongService {
     }
   }
 
-  // public async displayLikedTrack(allTracks: Track[]) {
-  //   this.newPlaylist = [];
-  //   let randomTrack;
-  //   for (let i = 0; i < 10; i++) {
-  //     randomTrack = allTracks[Math.floor(Math.random() * allTracks.length)];
-  //     this.newPlaylist.push(randomTrack);
-  //   }
+  public async displayLikedTrack(allTracks: Track[]) {
+    this.newPlaylist = [];
+    let randomTrack;
+    for (let i = 0; i < 10; i++) {
+      randomTrack = allTracks[Math.floor(Math.random() * allTracks.length)];
+      this.newPlaylist.push(randomTrack);
+    }
 
-  //   const likedTrackDiv = document.getElementById('liked-track');
+    const likedTrackDiv = document.getElementById('liked-track');
 
-  //   if (likedTrackDiv) {
-  //     likedTrackDiv.innerHTML = ' ';
-  //   } else {
-  //     // Gérer le cas où l'élément n'existe pas
-  //     console.error('Element avec l\'id "liked-track" n\'a pas été trouvé');
-  //   }
-  //   // Vider les détails de la this.newPlaylist précédente
+    if (likedTrackDiv) {
+      likedTrackDiv.innerHTML = ' ';
+    } else {
+      // Gérer le cas où l'élément n'existe pas
+      console.error('Element avec l\'id "liked-track" n\'a pas été trouvé');
+    }
+    // Vider les détails de la this.newPlaylist précédente
 
-  //   for (const music of this.newPlaylist) {
-  //     const p = document.createElement('p');
-  //     const trackData = await this.spotifyWebApi.getTrack(music.id);
-  //     const img = document.createElement('img');
-  //     img.src = trackData.album.images[0].url;
-  //     img.alt = `Cover de ${music.name} - ${music.artist}`;
-  //     img.style.width = '50px';
-  //     p.appendChild(img);
-  //     p.appendChild(document.createTextNode(`${music.name} - ${music.artist}`));
-  //     likedTrackDiv?.appendChild(p);
-  //   }
+    for (const music of this.newPlaylist) {
+      const p = document.createElement('p');
+      const trackData = await this.spotifyWebApi.getTrack(music.id);
+      const img = document.createElement('img');
+      img.src = trackData.album.images[0].url;
+      img.alt = `Cover de ${music.name} - ${music.artist}`;
+      img.style.width = '50px';
+      p.appendChild(img);
+      p.appendChild(document.createTextNode(`${music.name} - ${music.artist}`));
+      likedTrackDiv?.appendChild(p);
+    }
 
-  //   const btnRefrshLike = document.createElement('ion-button');
-  //   btnRefrshLike.classList.add('btn');
-  //   btnRefrshLike.classList.add('btn-primary');
-  //   btnRefrshLike.textContent = "Charger d'autres musiques";
-  //   btnRefrshLike.id = 'reload-liked';
-  //   btnRefrshLike.addEventListener('click', () =>
-  //     this.displayLikedTrack(allTracks)
-  //   );
-  //   likedTrackDiv?.appendChild(btnRefrshLike);
-  // }
+    const btnRefrshLike = document.createElement('ion-button');
+    btnRefrshLike.classList.add('btn');
+    btnRefrshLike.classList.add('btn-primary');
+    btnRefrshLike.textContent = "Charger d'autres musiques";
+    btnRefrshLike.id = 'reload-liked';
+    btnRefrshLike.addEventListener('click', () =>
+      this.displayLikedTrack(allTracks)
+    );
+    likedTrackDiv?.appendChild(btnRefrshLike);
+  }
 }

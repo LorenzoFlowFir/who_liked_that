@@ -32,6 +32,9 @@ export class RandLikedSongComponent implements OnInit {
     this.userId = this.user?.id;
     if (this.userId) {
       await this.handlePlaylist(this.userId);
+      if (this.playlist) {
+        //this.randomLikeService.displayLikedTrack(this.playlist?.liked_song);
+      }
     }
   }
 
