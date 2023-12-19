@@ -118,7 +118,10 @@ export class UserInfoService {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         console.log('Document data (from db):', docSnap.data());
-        this.socketService.registerUser(this.user?.nom ?? 'Un utilisateur');
+        this.socketService.registerUser(
+          this.user?.nom ?? 'Un utilisateur',
+          this.user?.id ?? '0'
+        );
 
         return docSnap.data();
       } else {

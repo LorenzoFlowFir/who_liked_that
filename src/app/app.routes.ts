@@ -9,9 +9,9 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',
-  },  {
-    path: 'create-party',
-    loadComponent: () => import('./create-party/create-party.page').then( m => m.CreatePartyPage)
   },
-
+  {
+    path: 'lobby',
+    loadComponent: () => import('./lobby/lobby.page').then((m) => m.LobbyPage),
+  },
 ];

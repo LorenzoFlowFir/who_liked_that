@@ -24,11 +24,10 @@
           [user]="user"
           (playlistChanged)="onPlaylistChanged($event)"
         ></app-rand-liked-song>
-        <ion-button [href]="['/create-party']" *ngIf="!isDisconnected">
-          Créer une Partie
-        </ion-button>
-
-        <app-join-party-button *ngIf="!isDisconnected"></app-join-party-button>
+        <div *ngIf="!isDisconnected && displayButton">
+          <app-create-party-button></app-create-party-button>
+          <app-join-party-button></app-join-party-button>
+        </div>
       </div>
     </div>
   </div>

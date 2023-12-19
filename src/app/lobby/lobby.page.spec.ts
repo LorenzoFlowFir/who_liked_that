@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CreatePartyPage } from './create-party.page';
+import { LobbyPage } from './lobby.page';
 
-describe('CreatePartyPage', () => {
-  let component: CreatePartyPage;
-  let fixture: ComponentFixture<CreatePartyPage>;
+describe('LobbyPage', () => {
+  let component: LobbyPage;
+  let fixture: ComponentFixture<LobbyPage>;
 
   beforeEach(async(() => {
-    fixture = TestBed.createComponent(CreatePartyPage);
+    fixture = TestBed.createComponent(LobbyPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

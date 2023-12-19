@@ -15,6 +15,7 @@ import { User } from '../models/user.model';
 import { Playlist } from '../models/playlist.model';
 import { SocketService } from '../services/socket/socket.service';
 import { JoinPartyButtonComponent } from '../join-party-button/join-party-button.component';
+import { CreatePartyButtonComponent } from '../create-party-button/create-party-button.component';
 
 @Component({
   selector: 'app-home',
@@ -32,6 +33,7 @@ import { JoinPartyButtonComponent } from '../join-party-button/join-party-button
     RandLikedSongComponent,
     UserInfoComponent,
     JoinPartyButtonComponent,
+    CreatePartyButtonComponent,
   ],
 })
 export class HomePage implements OnInit {
@@ -58,6 +60,7 @@ export class HomePage implements OnInit {
   public isDisconnected = true;
   public user: User | undefined;
   public playlist: Playlist | undefined;
+  public displayButton = true;
 
   constructor(private socketService: SocketService) {}
 
@@ -78,11 +81,12 @@ export class HomePage implements OnInit {
     if (hashParams.has('access_token')) {
       this.accessToken = hashParams.get('access_token');
       this.isDisconnected = false;
-    }
-    this.socketService.listen('testEvent').subscribe((data) => {
-      console.log(data);
-    });
 
-    this.socketService.emit('testEvent', { message: 'Hello from client!' });
+      this.socketService.listen('testEvent').subscribe((data) => {
+        console.log(data);
+      });
+
+      this.socketService.emit('testEvent', { message: 'Hello from client!' });
+    }
   }
 }
