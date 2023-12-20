@@ -13,5 +13,9 @@ export const routes: Routes = [
   {
     path: 'lobby',
     loadComponent: () => import('./lobby/lobby.page').then((m) => m.LobbyPage),
+  },  {
+    path: 'party',
+    loadComponent: () => import('./party/party.page').then( m => m.PartyPage)
   },
+
 ];

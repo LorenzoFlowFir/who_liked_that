@@ -2,7 +2,6 @@ import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { LikedSongService } from '../services/liked-song/liked-song.service';
 import { UserInfoService } from '../services/user-info/user-info.service';
 import { User } from '../models/user.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-info',
@@ -31,6 +30,7 @@ export class UserInfoComponent implements OnInit {
         } else {
           this.user = user;
           this.userChanged.emit(this.user);
+          this.userInfoService.setCurrentUser(this.user);
           const utilisateurExiste =
             await this.userInfoService.VerifierUtilisateurExiste(user.id);
           if (utilisateurExiste) {

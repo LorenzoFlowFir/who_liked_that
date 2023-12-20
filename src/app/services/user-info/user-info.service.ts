@@ -20,6 +20,7 @@ export class UserInfoService {
   public spotifyWebApi = new SpotifyWebApi();
   public user: User | undefined;
   firestore: Firestore = inject(Firestore);
+  private currentUser: User | undefined;
 
   constructor(private socketService: SocketService) {}
 
@@ -132,5 +133,13 @@ export class UserInfoService {
       console.error("Erreur lors de la récupération de l'utilisateur :", error);
       return false;
     }
+  }
+
+  public setCurrentUser(user: User) {
+    this.currentUser = user;
+  }
+
+  public getCurrentUser(): User | undefined {
+    return this.currentUser;
   }
 }

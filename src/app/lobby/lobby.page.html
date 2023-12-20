@@ -7,7 +7,19 @@
 <ion-content>
   <h1>Code d'invitation : {{ partyId }}</h1>
   <ion-list>
-    <ion-item *ngFor="let member of members"> {{ member.username }} </ion-item>
+    <ion-item *ngFor="let member of members">
+      {{ member.username }} - {{ member.isReady ? 'Prêt' : 'Pas prêt' }}
+    </ion-item>
   </ion-list>
+
+  <ion-button *ngIf="!isReady" (click)="showConfirmReadyModal()"
+    >Je suis prêt</ion-button
+  >
+
+  <!-- Afficher le bouton Lancer la partie seulement pour l'hôte -->
+  <ion-button *ngIf="isHost" (click)="launchParty()"
+    >Lancer la Partie</ion-button
+  >
+
   <ion-button (click)="leaveParty()">Quitter la Partie</ion-button>
 </ion-content>
