@@ -9,11 +9,13 @@ import {
   IonToolbar,
   IonTitle,
   IonButton,
+  ModalController,
 } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocketService } from '../services/socket/socket.service';
 import { environment } from '../../environments/environment';
 import { UserInfoService } from '../services/user-info/user-info.service';
+import { RandomSongForTheGameComponent } from '../random-song-for-the-game/random-song-for-the-game.component';
 
 @Component({
   selector: 'app-lobby',
@@ -30,6 +32,7 @@ import { UserInfoService } from '../services/user-info/user-info.service';
     IonToolbar,
     IonTitle,
     IonButton,
+    RandomSongForTheGameComponent,
   ],
 })
 export class LobbyPage implements OnInit {
@@ -37,20 +40,22 @@ export class LobbyPage implements OnInit {
   public members: any[] = [];
   public joinedPartySubscription: any;
   public updatedPartySubscription: any;
-  public isHost: boolean = true; //TODO Déterminez si l'utilisateur est l'hôte
+  public isHost: boolean = false;
   public isReady: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private socketService: SocketService,
     private router: Router,
-    private userInfoService: UserInfoService
+    private userInfoService: UserInfoService,
+    private modalController: ModalController
   ) {}
 
   async ngOnInit() {
     // Souscrire aux queryParams pour récupérer l'ID de la partie
     this.route.queryParams.subscribe((params) => {
       this.partyId = params['id'];
+      this.isHost = params['isHost'];
       // Vous pouvez maintenant utiliser this.partyId pour d'autres opérations
       // Après avoir rejoint la partie :
       if (environment.firstTime) {
@@ -77,19 +82,25 @@ export class LobbyPage implements OnInit {
       });
 
     this.socketService.listen('party-launched').subscribe(() => {
-      this.router.navigate(['/party'], { queryParams: { id: this.partyId } });
+      this.router.navigate(['/party'], {
+        queryParams: { id: this.partyId, isHost: this.isHost },
+      });
     });
   }
 
-  public showConfirmReadyModal() {
+  public async showConfirmReadyModal() {
     // Afficher un modal de confirmation ici
-    // Si l'utilisateur confirme, exécutez la méthode setReady()
-    this.setReady();
-  }
+    const modal = await this.modalController.create({
+      component: RandomSongForTheGameComponent,
+      cssClass: 'custom-modal',
+      componentProps: {
+        partyId: this.partyId, // Passez "partyId" comme propriété au modal
+      },
+    });
 
-  public setReady() {
-    this.socketService.emit('set-player-ready', this.partyId);
     this.isReady = true;
+    return await modal.present();
+    // Si l'utilisateur confirme, exécutez la méthode setReady()
   }
 
   public launchParty() {

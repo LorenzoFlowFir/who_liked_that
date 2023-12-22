@@ -20,7 +20,7 @@ export class CreatePartyButtonComponent {
       .listen('party-created-id')
       .subscribe((partyId: string) => {
         this.router.navigate(['/lobby'], {
-          queryParams: { id: partyId },
+          queryParams: { id: partyId, isHost: true },
         });
       });
   }

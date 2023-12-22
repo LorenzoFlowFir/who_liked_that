@@ -2,12 +2,14 @@ import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { LikedSongService } from '../services/liked-song/liked-song.service';
 import { UserInfoService } from '../services/user-info/user-info.service';
 import { User } from '../models/user.model';
+import { IonCard, IonImg } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.scss'],
   standalone: true,
+  imports: [IonCard, IonImg],
 })
 export class UserInfoComponent implements OnInit {
   @Input() public accessToken: any;
@@ -28,15 +30,25 @@ export class UserInfoComponent implements OnInit {
         if (user instanceof Error) {
           console.error('Une erreur est survenue :', user);
         } else {
-          this.user = user;
-          this.userChanged.emit(this.user);
-          this.userInfoService.setCurrentUser(this.user);
           const utilisateurExiste =
             await this.userInfoService.VerifierUtilisateurExiste(user.id);
           if (utilisateurExiste) {
-            this.userInfoService.GetUserInfoFromDB(user.id);
+            // Attendre la résolution de la promesse
+            this.userInfoService.GetUserInfoFromDB(user.id).then((userInfo) => {
+              if (userInfo) {
+                this.user = userInfo;
+                this.userChanged.emit(this.user);
+                this.userInfoService.setCurrentUser(this.user);
+              } else {
+                // Traiter le cas où l'utilisateur n'est pas trouvé
+                console.log('Utilisateur non trouvé dans la base de données');
+              }
+            });
           } else {
             this.userInfoService.AddUserInDB(user);
+            this.user = user;
+            this.userChanged.emit(this.user);
+            this.userInfoService.setCurrentUser(this.user);
           }
         }
       });

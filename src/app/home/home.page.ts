@@ -16,6 +16,7 @@ import { Playlist } from '../models/playlist.model';
 import { SocketService } from '../services/socket/socket.service';
 import { JoinPartyButtonComponent } from '../join-party-button/join-party-button.component';
 import { CreatePartyButtonComponent } from '../create-party-button/create-party-button.component';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -81,6 +82,7 @@ export class HomePage implements OnInit {
     if (hashParams.has('access_token')) {
       this.accessToken = hashParams.get('access_token');
       this.isDisconnected = false;
+      environment.accesToken = this.accessToken;
 
       this.socketService.listen('testEvent').subscribe((data) => {
         console.log(data);

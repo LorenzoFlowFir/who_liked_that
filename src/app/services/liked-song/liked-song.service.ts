@@ -13,19 +13,20 @@ import {
 } from '@angular/fire/firestore';
 import { User } from '../../models/user.model';
 import { Playlist } from '../../models/playlist.model';
+import { UserInfoService } from '../user-info/user-info.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LikedSongService {
   public playlist: Playlist | undefined;
-  public newPlaylist: Track[] = [];
+  public newPlaylist: Playlist | undefined;
   public allTracks: Track[] = [];
   public allPlaylists: Track[] = [];
   public loader = false;
   public firestore: Firestore = inject(Firestore);
 
-  constructor() {}
+  constructor(private userInfoService: UserInfoService) {}
 
   public spotifyWebApi = new SpotifyWebApi();
 
@@ -186,12 +187,19 @@ export class LikedSongService {
     }
   }
 
-  public async displayLikedTrack(allTracks: Track[]) {
-    this.newPlaylist = [];
+  public async displayLikedTrack(allTracks: Playlist) {
+    this.newPlaylist = {
+      user_id: allTracks.user_id,
+      liked_song: [],
+    };
+
     let randomTrack;
     for (let i = 0; i < 10; i++) {
-      randomTrack = allTracks[Math.floor(Math.random() * allTracks.length)];
-      this.newPlaylist.push(randomTrack);
+      randomTrack =
+        allTracks.liked_song[
+          Math.floor(Math.random() * allTracks.liked_song.length)
+        ];
+      this.newPlaylist?.liked_song.push(randomTrack);
     }
 
     const likedTrackDiv = document.getElementById('liked-track');
@@ -204,16 +212,36 @@ export class LikedSongService {
     }
     // Vider les détails de la this.newPlaylist précédente
 
-    for (const music of this.newPlaylist) {
-      const p = document.createElement('p');
+    for (const music of this.newPlaylist?.liked_song ?? []) {
       const trackData = await this.spotifyWebApi.getTrack(music.id);
+      // Créez un conteneur flex pour chaque piste
+      const trackContainer = document.createElement('div');
+      trackContainer.style.display = 'flex';
+      trackContainer.style.alignItems = 'center';
+      trackContainer.style.marginBottom = '10px'; // Espace entre les pistes
+
+      // Créez et configurez l'image
       const img = document.createElement('img');
       img.src = trackData.album.images[0].url;
       img.alt = `Cover de ${music.name} - ${music.artist}`;
       img.style.width = '50px';
-      p.appendChild(img);
-      p.appendChild(document.createTextNode(`${music.name} - ${music.artist}`));
-      likedTrackDiv?.appendChild(p);
+      img.style.marginRight = '10px'; // Espace entre l'image et le texte
+
+      // Ajoutez l'image au conteneur
+      trackContainer.appendChild(img);
+
+      // Créez et configurez le texte de la piste
+      const trackText = document.createElement('span'); // Utilisez 'span' pour le texte
+      const truncatedName = this.truncateString(music.name, 15);
+      const truncatedArtist = this.truncateString(music.artist, 15);
+      trackText.textContent = `${truncatedName} - ${truncatedArtist}`;
+      trackText.style.flex = '1'; // Permet au texte de remplir l'espace restant
+
+      // Ajoutez le texte au conteneur
+      trackContainer.appendChild(trackText);
+
+      // Ajoutez le conteneur au div#liked-track
+      likedTrackDiv?.appendChild(trackContainer);
     }
 
     const btnRefrshLike = document.createElement('ion-button');
@@ -225,5 +253,25 @@ export class LikedSongService {
       this.displayLikedTrack(allTracks)
     );
     likedTrackDiv?.appendChild(btnRefrshLike);
+    console.log(this.newPlaylist);
+
+    return this.newPlaylist;
+  }
+
+  //Getter et setter curent AllTracks
+
+  public getAllTracks(): Track[] {
+    return this.allTracks;
+  }
+
+  public setAllTracks(allTracks: Track[]): void {
+    this.allTracks = allTracks;
+  }
+
+  truncateString(str: string, num: number): string {
+    if (str.length <= num) {
+      return str;
+    }
+    return str.slice(0, num) + '...';
   }
 }

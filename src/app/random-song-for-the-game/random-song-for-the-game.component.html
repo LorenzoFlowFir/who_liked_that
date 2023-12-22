@@ -1,0 +1,10 @@
+<ion-header class="pad">
+  <ion-title>Titres utilisé pour la partie</ion-title>
+  <ion-buttons slot="end">
+    <ion-button (click)="closeModal()">Fermer</ion-button>
+  </ion-buttons>
+</ion-header>
+<ion-content class="pad">
+  <div id="liked-track"></div>
+  <ion-button *ngIf="!isReady" (click)="setReady()">Je suis prêt</ion-button>
+</ion-content>

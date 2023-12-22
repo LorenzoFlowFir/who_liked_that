@@ -1,0 +1,15 @@
+.pad {
+  padding: 5%;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+#liked-track {
+  padding: 0 5% 0 5%;
+}
+
+#liked-track > p {
+  transform: scale(0.5);
+}
