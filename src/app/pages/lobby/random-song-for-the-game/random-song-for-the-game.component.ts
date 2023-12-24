@@ -8,11 +8,11 @@ import {
   IonContent,
   ModalController,
 } from '@ionic/angular/standalone';
-import { LikedSongService } from '../services/liked-song/liked-song.service';
-import { UserInfoService } from '../services/user-info/user-info.service';
-import { User } from '../models/user.model';
-import { Playlist } from '../models/playlist.model';
-import { SocketService } from '../services/socket/socket.service';
+import { LikedSongService } from '../../../services/liked-song/liked-song.service';
+import { UserInfoService } from '../../../services/user-info/user-info.service';
+import { User } from '../../../models/user.model';
+import { Playlist } from '../../../models/playlist.model';
+import { SocketService } from '../../../services/socket/socket.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -45,27 +45,36 @@ export class RandomSongForTheGameComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.userInfoService.getCurrentUser();
-    console.log(this.partyId);
 
     if (this.user) {
       this.likedSongService.GetPlaylistFromDB(this.user.id).then((tracks) => {
         if (tracks && typeof tracks !== 'boolean') {
-          // Ici, nous sommes sûrs que "playlist" est de type "Playlist"
-          this.likedSongService.displayLikedTrack(tracks).then((playlist) => {
-            this.playlist = playlist;
-          });
+          this.likedSongService
+            .get10RandomTracksFromPlaylist(tracks)
+            .then((playlist) => {
+              this.likedSongService
+                .displayLikedTrack(tracks, playlist)
+                .then((playlist) => {
+                  this.playlist = playlist;
+                });
+            });
         }
       });
     }
   }
 
   public setReady() {
-    if (this.partyId) {
-      this.socketService.emit('set-player-ready', this.partyId);
+    if (this.partyId && this.playlist) {
+      this.socketService.emit('set-player-ready', {
+        partyId: this.partyId,
+        playlist: this.playlist,
+      });
       this.isReady = true;
       this.modalController.dismiss();
     } else {
-      console.error('setReady was called but partyId is not defined');
+      console.error(
+        'setReady was called but partyId or playlist is not defined'
+      );
     }
   }
 

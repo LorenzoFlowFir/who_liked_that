@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SocketService } from '../services/socket/socket.service';
+import { SocketService } from '../../../services/socket/socket.service';
 import { IonButton } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 

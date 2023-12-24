@@ -13,8 +13,8 @@ export class SocketService {
     this.socket = io(this.uri);
   }
 
-  registerUser(username: string, idSpotify: string) {
-    this.socket.emit('register', username, idSpotify);
+  registerUser(username: string, idSpotify: string, profilPicture: string) {
+    this.socket.emit('register', username, idSpotify, profilPicture);
   }
 
   // Écouter des événements spécifiques émis par le serveur

@@ -1,0 +1,15 @@
+<ion-header class="pad">
+  <ion-title>Vos Titres</ion-title>
+  <ion-buttons slot="end">
+    <ion-button (click)="closeModal()">Fermer</ion-button>
+  </ion-buttons>
+</ion-header>
+<ion-content class="pad">
+  <div class="center">
+    <small>Voici les titres que vous allez joué pendant la partie.</small>
+    <br />
+    <small>Voulez-vous charger d'autres titres ou valider cela ?</small>
+  </div>
+  <div id="liked-track"></div>
+  <ion-button *ngIf="!isReady" (click)="setReady()">Valider</ion-button>
+</ion-content>

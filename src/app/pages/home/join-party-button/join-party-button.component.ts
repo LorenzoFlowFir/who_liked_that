@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SocketService } from '../services/socket/socket.service';
+import { SocketService } from '../../../services/socket/socket.service';
 import { IonButton, IonInput } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms'; // Import the FormsModule
 import { Router } from '@angular/router';

@@ -10,4 +10,14 @@
       <ion-title size="large">party</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-card>
+    <ion-img [src]="targetTrack?.cover"> </ion-img>
+    <ion-card-content
+      >{{targetTrack?.name}} {{targetTrack?.artist}}</ion-card-content
+    >
+  </ion-card>
+  <ion-button *ngFor="let member of members" color="tertiary">
+    {{member?.username}}
+  </ion-button>
 </ion-content>

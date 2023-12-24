@@ -9,14 +9,14 @@ import {
 } from '@ionic/angular/standalone';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
-import { RandLikedSongComponent } from '../rand-liked-song/rand-liked-song.component';
-import { UserInfoComponent } from '../user-info/user-info.component';
-import { User } from '../models/user.model';
-import { Playlist } from '../models/playlist.model';
-import { SocketService } from '../services/socket/socket.service';
-import { JoinPartyButtonComponent } from '../join-party-button/join-party-button.component';
-import { CreatePartyButtonComponent } from '../create-party-button/create-party-button.component';
-import { environment } from '../../environments/environment';
+import { RandLikedSongComponent } from './rand-liked-song/rand-liked-song.component';
+import { UserInfoComponent } from './user-info/user-info.component';
+import { User } from '../../models/user.model';
+import { Playlist } from '../../models/playlist.model';
+import { SocketService } from '../../services/socket/socket.service';
+import { JoinPartyButtonComponent } from './join-party-button/join-party-button.component';
+import { CreatePartyButtonComponent } from './create-party-button/create-party-button.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',

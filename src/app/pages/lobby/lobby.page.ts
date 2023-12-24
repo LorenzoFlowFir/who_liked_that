@@ -10,12 +10,21 @@ import {
   IonTitle,
   IonButton,
   ModalController,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardContent,
+  IonThumbnail,
+  IonImg,
+  IonLabel,
 } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SocketService } from '../services/socket/socket.service';
-import { environment } from '../../environments/environment';
-import { UserInfoService } from '../services/user-info/user-info.service';
-import { RandomSongForTheGameComponent } from '../random-song-for-the-game/random-song-for-the-game.component';
+import { SocketService } from '../../services/socket/socket.service';
+import { environment } from '../../../environments/environment';
+import { UserInfoService } from '../../services/user-info/user-info.service';
+import { RandomSongForTheGameComponent } from './random-song-for-the-game/random-song-for-the-game.component';
+import { Playlist } from 'src/app/models/playlist.model';
 
 @Component({
   selector: 'app-lobby',
@@ -33,6 +42,14 @@ import { RandomSongForTheGameComponent } from '../random-song-for-the-game/rando
     IonTitle,
     IonButton,
     RandomSongForTheGameComponent,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+    IonCardContent,
+    IonThumbnail,
+    IonImg,
+    IonLabel,
   ],
 })
 export class LobbyPage implements OnInit {
@@ -42,6 +59,8 @@ export class LobbyPage implements OnInit {
   public updatedPartySubscription: any;
   public isHost: boolean = false;
   public isReady: boolean = false;
+  public showStartGameButton: boolean = true;
+  public grandePlaylist: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -85,6 +104,14 @@ export class LobbyPage implements OnInit {
       this.router.navigate(['/party'], {
         queryParams: { id: this.partyId, isHost: this.isHost },
       });
+    });
+
+    // Dans le composant de l'hôte
+    this.socketService.listen('all-players-ready').subscribe((playlists) => {
+      // Stocker la grande playlist consolidée
+      this.grandePlaylist = playlists;
+      // Afficher le bouton "Lancer la partie"
+      this.showStartGameButton = false;
     });
   }
 

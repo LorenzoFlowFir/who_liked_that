@@ -109,7 +109,9 @@ export class UserInfoService {
 
       this.socketService.registerUser(
         this.user?.nom ?? 'Un utilisateur',
-        this.user?.id ?? '0'
+        this.user?.id ?? '0',
+        this.user?.photo_profil ??
+          'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624'
       );
       return true;
     } catch (error) {
@@ -127,7 +129,9 @@ export class UserInfoService {
         console.log('Document data (from db):', docSnap.data());
         this.socketService.registerUser(
           this.user?.nom ?? 'Un utilisateur',
-          this.user?.id ?? '0'
+          this.user?.id ?? '0',
+          this.user?.photo_profil ??
+            'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624'
         );
 
         return docSnap.data() as User;

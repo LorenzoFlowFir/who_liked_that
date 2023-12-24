@@ -1,15 +1,15 @@
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
-import { LikedSongService } from '../services/liked-song/liked-song.service';
-import { UserInfoService } from '../services/user-info/user-info.service';
-import { User } from '../models/user.model';
-import { IonCard, IonImg } from '@ionic/angular/standalone';
+import { LikedSongService } from '../../../services/liked-song/liked-song.service';
+import { UserInfoService } from '../../../services/user-info/user-info.service';
+import { User } from '../../../models/user.model';
+import { IonCard, IonImg, IonCardContent } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.scss'],
   standalone: true,
-  imports: [IonCard, IonImg],
+  imports: [IonCard, IonImg, IonCardContent],
 })
 export class UserInfoComponent implements OnInit {
   @Input() public accessToken: any;

@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LikedSongService } from '../services/liked-song/liked-song.service';
-import { Track } from '../models/track.model';
+import { LikedSongService } from '../../../services/liked-song/liked-song.service';
+import { Track } from '../../../models/track.model';
 import { IonSpinner } from '@ionic/angular/standalone';
-import { User } from '../models/user.model';
-import { Playlist } from '../models/playlist.model';
-import { OptionsService } from '../services/options/options.service';
+import { User } from '../../../models/user.model';
+import { Playlist } from '../../../models/playlist.model';
+import { OptionsService } from '../../../services/options/options.service';
 
 @Component({
   selector: 'app-rand-liked-song',

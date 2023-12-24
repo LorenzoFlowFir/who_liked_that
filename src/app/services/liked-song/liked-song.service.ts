@@ -187,7 +187,7 @@ export class LikedSongService {
     }
   }
 
-  public async displayLikedTrack(allTracks: Playlist) {
+  public async get10RandomTracksFromPlaylist(allTracks: Playlist) {
     this.newPlaylist = {
       user_id: allTracks.user_id,
       liked_song: [],
@@ -202,6 +202,10 @@ export class LikedSongService {
       this.newPlaylist?.liked_song.push(randomTrack);
     }
 
+    return this.newPlaylist;
+  }
+
+  public async displayLikedTrack(allTracks: Playlist, newPlaylist: Playlist) {
     const likedTrackDiv = document.getElementById('liked-track');
 
     if (likedTrackDiv) {
@@ -210,9 +214,9 @@ export class LikedSongService {
       // Gérer le cas où l'élément n'existe pas
       console.error('Element avec l\'id "liked-track" n\'a pas été trouvé');
     }
-    // Vider les détails de la this.newPlaylist précédente
+    // Vider les détails de la newPlaylist précédente
 
-    for (const music of this.newPlaylist?.liked_song ?? []) {
+    for (const music of newPlaylist?.liked_song ?? []) {
       const trackData = await this.spotifyWebApi.getTrack(music.id);
       // Créez un conteneur flex pour chaque piste
       const trackContainer = document.createElement('div');
@@ -250,12 +254,14 @@ export class LikedSongService {
     btnRefrshLike.textContent = "Charger d'autres musiques";
     btnRefrshLike.id = 'reload-liked';
     btnRefrshLike.addEventListener('click', () =>
-      this.displayLikedTrack(allTracks)
+      this.get10RandomTracksFromPlaylist(allTracks).then((playlist) => {
+        this.displayLikedTrack(allTracks, playlist);
+      })
     );
     likedTrackDiv?.appendChild(btnRefrshLike);
-    console.log(this.newPlaylist);
+    console.log(newPlaylist);
 
-    return this.newPlaylist;
+    return newPlaylist;
   }
 
   //Getter et setter curent AllTracks
