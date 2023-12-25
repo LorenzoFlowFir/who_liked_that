@@ -52,6 +52,11 @@ export class PartyPage implements OnInit {
   private queryParamsSubscription: Subscription | undefined;
   private partyInfoSubscription: Subscription | undefined;
 
+  public playerGuesses: { [key: string]: string } = {};
+  public guessingTimeOver: boolean = false;
+
+  public timeLeft: number = 30; // Temps en secondes
+
   constructor(
     private route: ActivatedRoute,
     private socketService: SocketService, // Assurez-vous d'injecter SocketService
@@ -100,9 +105,11 @@ export class PartyPage implements OnInit {
         this.socketService.listen('send-target-track').subscribe((data) => {
           this.targetTrack = data.track;
           this.targetPlayer = data.player;
+          this.members = data.members;
         });
       }
     });
+    this.endGuessingTime();
   }
 
   public connexion(): Promise<void> {
@@ -117,6 +124,59 @@ export class PartyPage implements OnInit {
         }
       );
     });
+  }
+
+  // Fonction appelée lorsque le joueur fait une supposition
+  public guessPlayer(member: any) {
+    if (!this.guessingTimeOver) {
+      this.playerGuesses[member.id] =
+        member.id === this.targetPlayer.id ? 'correct' : 'incorrect';
+      this.socketService.emit('player-guess', {
+        partyId: this.partyId,
+        playerId: member.id,
+        isCorrect: this.playerGuesses[member.id] === 'correct',
+      });
+    }
+  }
+
+  // Fonction pour obtenir la couleur du bouton
+  public getColor(member: any): string {
+    if (this.guessingTimeOver) {
+      return this.playerGuesses[member.id] || 'tertiary';
+    } else {
+      if (this.playerGuesses[member.id]) {
+        return 'warning';
+      } else {
+        return 'tertiary';
+      }
+    }
+  }
+
+  public endGuessingTime() {
+    const interval = setInterval(() => {
+      this.timeLeft--;
+      if (this.timeLeft <= 0) {
+        clearInterval(interval);
+        // Le reste de la logique...
+      }
+    }, 1000);
+
+    setTimeout(() => {
+      this.guessingTimeOver = true;
+      // Parcourir tous les membres pour mettre à jour les couleurs
+      this.members.forEach((member) => {
+        if (this.playerGuesses[member.id]) {
+          // Mettre à jour seulement si une supposition a été faite
+          if (this.playerGuesses[member.id] === 'correct') {
+            this.playerGuesses[member.id] = 'success';
+          } else {
+            this.playerGuesses[member.id] = 'danger';
+          }
+        }
+      });
+      // Assurez-vous que le bouton du targetPlayer est toujours success
+      this.playerGuesses[this.targetPlayer.id] = 'success';
+    }, 30000); // 30 secondes
   }
 
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface

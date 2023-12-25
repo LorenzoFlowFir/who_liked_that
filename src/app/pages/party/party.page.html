@@ -12,12 +12,20 @@
   </ion-header>
 
   <ion-card>
+    <ion-card-content *ngIf="!guessingTimeOver"
+      >Temps restant : {{ timeLeft }} secondes</ion-card-content
+    >
     <ion-img [src]="targetTrack?.cover"> </ion-img>
     <ion-card-content
       >{{targetTrack?.name}} {{targetTrack?.artist}}</ion-card-content
     >
   </ion-card>
-  <ion-button *ngFor="let member of members" color="tertiary">
-    {{member?.username}}
+  <!-- party.page.html -->
+  <ion-button
+    *ngFor="let member of members"
+    [color]="getColor(member)"
+    (click)="guessPlayer(member)"
+  >
+    {{ member?.username }}
   </ion-button>
 </ion-content>
