@@ -13,19 +13,36 @@
 
   <ion-card>
     <ion-card-content *ngIf="!guessingTimeOver"
-      >Temps restant : {{ timeLeft }} secondes</ion-card-content
-    >
-    <ion-img [src]="targetTrack?.cover"> </ion-img>
-    <ion-card-content
+      >Temps restant : {{ timeLeft }} secondes
+    </ion-card-content>
+    <ion-img *ngIf="hidden" [src]="hiddenCover" class="musicCover"></ion-img>
+    <ion-img
+      *ngIf="!hidden"
+      [src]="targetTrack?.cover"
+      class="musicCover"
+    ></ion-img>
+    <ion-card-content *ngIf="!hidden"
       >{{targetTrack?.name}} {{targetTrack?.artist}}</ion-card-content
     >
+    <ion-card-content *ngIf="isHost">
+      <ion-button (click)="toggleHidden()" class="round-button">
+        <ion-icon [name]="hidden ? 'eye-sharp' : 'eye-off-sharp'"></ion-icon>
+      </ion-button>
+    </ion-card-content>
   </ion-card>
-  <!-- party.page.html -->
-  <ion-button
-    *ngFor="let member of members"
-    [color]="getColor(member)"
-    (click)="guessPlayer(member)"
-  >
-    {{ member?.username }}
+  <!-- Ajoutez un bouton pour démarrer le vote -->
+  <ion-button *ngIf="isHost && !votingStarted" (click)="triggerVoting()">
+    <b>VOTEZ !</b>
   </ion-button>
+
+  <!-- Affichez les noms des joueurs et le chrono seulement si votingStarted est true -->
+  <div *ngIf="votingStarted">
+    <ion-button
+      *ngFor="let member of members"
+      [color]="getColor(member)"
+      (click)="guessPlayer(member)"
+    >
+      {{ member?.username }}
+    </ion-button>
+  </div>
 </ion-content>

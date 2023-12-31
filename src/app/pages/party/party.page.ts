@@ -1,5 +1,5 @@
 // party.page.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -11,6 +11,7 @@ import {
   IonImg,
   IonCardContent,
   IonButton,
+  IonIcon,
 } from '@ionic/angular/standalone';
 import { ActivatedRoute } from '@angular/router';
 import { SocketService } from '../../services/socket/socket.service';
@@ -19,6 +20,15 @@ import { User } from 'src/app/models/user.model';
 import { Subscription } from 'rxjs';
 import { Playlist } from 'src/app/models/playlist.model';
 import { Track } from 'src/app/models/track.model';
+//Pour les icons
+import { addIcons } from 'ionicons';
+import {
+  eyeSharp,
+  eyeOffSharp,
+  playSharp,
+  pauseSharp,
+  playSkipForwardSharp,
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-party',
@@ -36,9 +46,10 @@ import { Track } from 'src/app/models/track.model';
     IonImg,
     IonCardContent,
     IonButton,
+    IonIcon,
   ],
 })
-export class PartyPage implements OnInit {
+export class PartyPage implements OnInit, OnDestroy {
   public partyId: string | null = null;
   public isHost: boolean = false;
 
@@ -51,65 +62,99 @@ export class PartyPage implements OnInit {
 
   private queryParamsSubscription: Subscription | undefined;
   private partyInfoSubscription: Subscription | undefined;
+  private sendTargetTrackSub: Subscription | undefined;
+  private votingStartedSub: Subscription | undefined;
+  private updateHiddenSub: Subscription | undefined;
+  private subscriptionsInitialized: boolean = false;
 
   public playerGuesses: { [key: string]: string } = {};
   public guessingTimeOver: boolean = false;
 
-  public timeLeft: number = 30; // Temps en secondes
+  public timeLeft: number = 15; // Temps en secondes
+
+  public hiddenCover: string = '../../../assets/nullMusic.png';
+  public hidden: boolean = true;
+
+  public votingStarted: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private socketService: SocketService, // Assurez-vous d'injecter SocketService
     private mancheService: MancheService
-  ) {}
+  ) {
+    addIcons({
+      eyeSharp,
+      eyeOffSharp,
+      playSharp,
+      pauseSharp,
+      playSkipForwardSharp,
+    });
+  }
 
   ngOnInit() {
     this.connexion().then(() => {
-      if (this.isHost) {
-        if (this.partyId) {
-          this.socketService.emit('request-party-info', this.partyId);
-          this.partyInfoSubscription = this.socketService
-            .listen('party-info')
-            .subscribe((data: any) => {
-              //Récupère les informations de la partie (Membres + Sons des Joueurs)
-              this.members = data.members;
-              this.playlists = data.playlists;
+      if (!this.subscriptionsInitialized) {
+        if (this.isHost) {
+          if (this.partyId) {
+            this.socketService.emit('request-party-info', this.partyId);
+            this.partyInfoSubscription = this.socketService
+              .listen('party-info')
+              .subscribe((data: any) => {
+                //Récupère les informations de la partie (Membres + Sons des Joueurs)
+                this.members = data.members;
+                this.playlists = data.playlists;
 
-              //Choisi le joueur cible
-              this.targetPlayer = this.mancheService.getRandomPlayer(
-                this.members
-              );
-
-              //Récupère les sons en jeu du joueur cible
-              this.targetPlaylist = this.playlists.find(
-                (playlist) => playlist.userId === this.targetPlayer?.idSpotify
-              );
-              if (this.targetPlaylist) {
-                //Choisi la musique cible
-                this.targetTrack = this.mancheService.getRandomTrack(
-                  this.targetPlaylist
+                //Choisi le joueur cible
+                this.targetPlayer = this.mancheService.getRandomPlayer(
+                  this.members
                 );
 
-                //Joue la musique cible
-                this.mancheService.playTrack(this.targetTrack);
-                this.socketService.emit('target-track', {
-                  partyId: this.partyId,
-                  track: this.targetTrack,
-                  player: this.targetPlayer,
-                });
-              }
+                //Récupère les sons en jeu du joueur cible
+                this.targetPlaylist = this.playlists.find(
+                  (playlist) => playlist.userId === this.targetPlayer?.idSpotify
+                );
+                if (this.targetPlaylist) {
+                  //Choisi la musique cible
+                  this.targetTrack = this.mancheService.getRandomTrack(
+                    this.targetPlaylist
+                  );
+                  console.log(this.targetTrack);
+
+                  //Joue la musique cible
+                  this.mancheService.playTrack(this.targetTrack);
+                  this.socketService.emit('target-track', {
+                    partyId: this.partyId,
+                    track: this.targetTrack,
+                    player: this.targetPlayer,
+                  });
+                }
+              });
+          }
+        } else if (this.isHost === false) {
+          console.log("Vous n'êtes pas l'hôte de la partie");
+          this.sendTargetTrackSub = this.socketService
+            .listen('send-target-track')
+            .subscribe((data) => {
+              this.targetTrack = data.track;
+              this.targetPlayer = data.player;
+              this.members = data.members;
             });
         }
-      } else if (this.isHost === false) {
-        console.log("Vous n'êtes pas l'hôte de la partie");
-        this.socketService.listen('send-target-track').subscribe((data) => {
-          this.targetTrack = data.track;
-          this.targetPlayer = data.player;
-          this.members = data.members;
-        });
+        this.subscriptionsInitialized = true;
       }
     });
-    this.endGuessingTime();
+
+    this.votingStartedSub = this.socketService
+      .listen('voting-started')
+      .subscribe(() => {
+        this.startVoting();
+      });
+
+    this.updateHiddenSub = this.socketService
+      .listen('update-hidden')
+      .subscribe((data: any) => {
+        this.hidden = data.hidden;
+      });
   }
 
   public connexion(): Promise<void> {
@@ -126,15 +171,44 @@ export class PartyPage implements OnInit {
     });
   }
 
+  public startVoting() {
+    this.votingStarted = true;
+    this.endGuessingTime();
+  }
+
+  public toggleHidden() {
+    this.hidden = !this.hidden;
+    // Envoi de l'état de "hidden" à tous les clients
+    this.socketService.emit('toggle-hidden', {
+      partyId: this.partyId,
+      hidden: this.hidden,
+    });
+  }
+
+  public triggerVoting() {
+    if (this.isHost && this.partyId) {
+      this.socketService.emit('start-voting', this.partyId);
+    }
+  }
+
   // Fonction appelée lorsque le joueur fait une supposition
   public guessPlayer(member: any) {
     if (!this.guessingTimeOver) {
-      this.playerGuesses[member.id] =
-        member.id === this.targetPlayer.id ? 'correct' : 'incorrect';
+      // Réinitialiser les choix précédents
+      for (const key in this.playerGuesses) {
+        if (Object.prototype.hasOwnProperty.call(this.playerGuesses, key)) {
+          this.playerGuesses[key] = 'unselected';
+        }
+      }
+
+      // Enregistrer le nouveau choix
+      this.playerGuesses[member.id] = 'selected';
+
+      // Envoyer la réponse au serveur
       this.socketService.emit('player-guess', {
         partyId: this.partyId,
         playerId: member.id,
-        isCorrect: this.playerGuesses[member.id] === 'correct',
+        isCorrect: member.id === this.targetPlayer.id,
       });
     }
   }
@@ -142,41 +216,55 @@ export class PartyPage implements OnInit {
   // Fonction pour obtenir la couleur du bouton
   public getColor(member: any): string {
     if (this.guessingTimeOver) {
-      return this.playerGuesses[member.id] || 'tertiary';
-    } else {
-      if (this.playerGuesses[member.id]) {
-        return 'warning';
-      } else {
-        return 'tertiary';
+      switch (this.playerGuesses[member.id]) {
+        case 'success':
+          return 'success';
+        case 'danger':
+          return 'danger';
+        default:
+          return 'tertiary';
       }
+    } else {
+      return this.playerGuesses[member.id] === 'selected'
+        ? 'warning'
+        : 'tertiary';
     }
   }
 
   public endGuessingTime() {
-    const interval = setInterval(() => {
-      this.timeLeft--;
-      if (this.timeLeft <= 0) {
-        clearInterval(interval);
-        // Le reste de la logique...
-      }
-    }, 1000);
+    if (this.votingStarted) {
+      const interval = setInterval(() => {
+        this.timeLeft--;
+        if (this.timeLeft <= 0) {
+          clearInterval(interval);
+          // Autres logiques...
+        }
+      }, 1000);
 
-    setTimeout(() => {
-      this.guessingTimeOver = true;
-      // Parcourir tous les membres pour mettre à jour les couleurs
-      this.members.forEach((member) => {
-        if (this.playerGuesses[member.id]) {
-          // Mettre à jour seulement si une supposition a été faite
-          if (this.playerGuesses[member.id] === 'correct') {
-            this.playerGuesses[member.id] = 'success';
-          } else {
-            this.playerGuesses[member.id] = 'danger';
+      setTimeout(() => {
+        this.guessingTimeOver = true;
+
+        // Parcourir tous les membres pour mettre à jour les couleurs
+        for (const key in this.playerGuesses) {
+          if (Object.prototype.hasOwnProperty.call(this.playerGuesses, key)) {
+            if (key === this.targetPlayer.id) {
+              // Le targetPlayer est toujours en vert
+              this.playerGuesses[key] = 'success';
+            } else if (this.playerGuesses[key] === 'selected') {
+              // Marquer les autres choix incorrects en rouge
+              this.playerGuesses[key] = 'danger';
+            }
           }
         }
-      });
-      // Assurez-vous que le bouton du targetPlayer est toujours success
-      this.playerGuesses[this.targetPlayer.id] = 'success';
-    }, 30000); // 30 secondes
+
+        // S'assurer que le targetPlayer est en vert même s'il n'a pas été choisi
+        if (!this.playerGuesses[this.targetPlayer.id]) {
+          this.playerGuesses[this.targetPlayer.id] = 'success';
+        }
+
+        console.log('Fin du temps de supposition');
+      }, 15000); // 15 secondes
+    }
   }
 
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
@@ -187,5 +275,15 @@ export class PartyPage implements OnInit {
     if (this.partyInfoSubscription) {
       this.partyInfoSubscription.unsubscribe();
     }
+    if (this.sendTargetTrackSub) {
+      this.sendTargetTrackSub.unsubscribe();
+    }
+    if (this.votingStartedSub) {
+      this.votingStartedSub.unsubscribe();
+    }
+    if (this.updateHiddenSub) {
+      this.updateHiddenSub.unsubscribe();
+    }
+    this.subscriptionsInitialized = false;
   }
 }
