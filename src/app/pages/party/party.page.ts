@@ -2,6 +2,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UserInfoService } from 'src/app/services/user-info/user-info.service';
 import {
   IonCard,
   IonHeader,
@@ -77,10 +78,17 @@ export class PartyPage implements OnInit, OnDestroy {
 
   public votingStarted: boolean = false;
 
+  public currentManche: number = 1; // Suivi de la manche actuelle
+  public totalManches: number = 10; // Total des manches
+
+  public myUserId: string = this.userInfoService.user!.id;
+  public playerScores: number = 0;
+
   constructor(
     private route: ActivatedRoute,
     private socketService: SocketService, // Assurez-vous d'injecter SocketService
-    private mancheService: MancheService
+    private mancheService: MancheService,
+    private userInfoService: UserInfoService
   ) {
     addIcons({
       eyeSharp,
@@ -142,6 +150,7 @@ export class PartyPage implements OnInit, OnDestroy {
         }
         this.subscriptionsInitialized = true;
       }
+      this.startManche(); // Commence la première manche
     });
 
     this.votingStartedSub = this.socketService
@@ -169,6 +178,56 @@ export class PartyPage implements OnInit, OnDestroy {
         }
       );
     });
+  }
+
+  startManche() {
+    // Vérifiez si le nombre actuel de manches est inférieur ou égal au total prévu
+    if (this.currentManche <= this.totalManches) {
+      // Réinitialiser les états pour la nouvelle manche
+      this.guessingTimeOver = false;
+      this.votingStarted = false;
+      this.hidden = true;
+      this.timeLeft = 15; // Réinitialiser le chronomètre
+      this.playerGuesses = {}; // Réinitialiser les suppositions des joueurs
+
+      // Si c'est l'hôte, choisissez un nouveau joueur cible et une nouvelle piste
+      if (this.isHost && this.partyId) {
+        // Sélectionner un nouveau joueur cible au hasard
+        this.targetPlayer = this.mancheService.getRandomPlayer(this.members);
+
+        // Trouver la playlist du joueur cible
+        this.targetPlaylist = this.playlists.find(
+          (playlist) => playlist.userId === this.targetPlayer?.idSpotify
+        );
+
+        // Si une playlist cible est trouvée, sélectionnez une piste au hasard
+        if (this.targetPlaylist) {
+          this.targetTrack = this.mancheService.getRandomTrack(
+            this.targetPlaylist
+          );
+          console.log(
+            'Manche ' +
+              this.currentManche +
+              ': Lecture de ' +
+              this.targetTrack.name
+          );
+
+          // Jouer la musique cible
+          this.mancheService.playTrack(this.targetTrack);
+
+          // Envoyer les informations de la piste cible au serveur
+          this.socketService.emit('target-track', {
+            partyId: this.partyId,
+            track: this.targetTrack,
+            player: this.targetPlayer,
+          });
+        }
+      }
+    } else {
+      // Si toutes les manches sont terminées
+      console.log('Fin de la partie !');
+      // Ici, vous pouvez gérer la fin de la partie (afficher les scores, naviguer vers un écran de fin, etc.)
+    }
   }
 
   public startVoting() {
@@ -263,6 +322,15 @@ export class PartyPage implements OnInit, OnDestroy {
         }
 
         console.log('Fin du temps de supposition');
+        setTimeout(() => {
+          this.currentManche++; // Incrémenter le numéro de la manche actuelle
+          if (this.currentManche <= this.totalManches) {
+            this.startManche(); // Commence la manche suivante
+          } else {
+            console.log('Fin de la partie !');
+            // Ajouter ici la logique de fin de partie
+          }
+        }, 5000); // 5 secondes
       }, 15000); // 15 secondes
     }
   }

@@ -28,10 +28,13 @@ export class MancheService {
   public getRandomPlayer(players: User[]): User {
     return players[Math.floor(Math.random() * players.length)];
   }
+  public getRandomTrack(playlist: any): Track {
+    let randomIndex = Math.floor(Math.random() * playlist.tracks.length);
+    let randomTrack = playlist.tracks[randomIndex];
+    playlist.tracks.splice(randomIndex, 1);
+    console.log(playlist);
 
-  //Récupère une musique aléatoire parmis les musiques du joueur qu'on a choisi
-  public getRandomTrack(player: any): Track {
-    return player.tracks[Math.floor(Math.random() * player.tracks.length)];
+    return randomTrack;
   }
 
   //Jouer la musique qui a été choisi
