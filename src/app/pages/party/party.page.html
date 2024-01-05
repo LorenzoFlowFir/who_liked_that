@@ -40,7 +40,7 @@
   <div *ngIf="votingStarted">
     <ng-container *ngFor="let member of members">
       <ion-button
-        *ngIf="member.id !== myUserId"
+        *ngIf="member.username !== myUsername"
         [color]="getColor(member)"
         (click)="guessPlayer(member)"
       >

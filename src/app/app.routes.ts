@@ -21,4 +21,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/party/party.page').then((m) => m.PartyPage),
   },
+  {
+    path: 'classement',
+    loadComponent: () =>
+      import('./pages/classement/classement.page').then(
+        (m) => m.ClassementPage
+      ),
+  },
 ];

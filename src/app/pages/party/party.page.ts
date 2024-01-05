@@ -14,7 +14,7 @@ import {
   IonButton,
   IonIcon,
 } from '@ionic/angular/standalone';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SocketService } from '../../services/socket/socket.service';
 import { MancheService } from 'src/app/services/manche/manche.service';
 import { User } from 'src/app/models/user.model';
@@ -82,13 +82,16 @@ export class PartyPage implements OnInit, OnDestroy {
   public totalManches: number = 10; // Total des manches
 
   public myUserId: string = this.userInfoService.user!.id;
+  public myUsername: string = this.userInfoService.user!.nom;
   public playerScores: number = 0;
+  private memberGuesses: any;
 
   constructor(
     private route: ActivatedRoute,
     private socketService: SocketService, // Assurez-vous d'injecter SocketService
     private mancheService: MancheService,
-    private userInfoService: UserInfoService
+    private userInfoService: UserInfoService,
+    private router: Router
   ) {
     addIcons({
       eyeSharp,
@@ -262,13 +265,7 @@ export class PartyPage implements OnInit, OnDestroy {
 
       // Enregistrer le nouveau choix
       this.playerGuesses[member.id] = 'selected';
-
-      // Envoyer la réponse au serveur
-      this.socketService.emit('player-guess', {
-        partyId: this.partyId,
-        playerId: member.id,
-        isCorrect: member.id === this.targetPlayer.id,
-      });
+      this.memberGuesses = member;
     }
   }
 
@@ -321,13 +318,42 @@ export class PartyPage implements OnInit, OnDestroy {
           this.playerGuesses[this.targetPlayer.id] = 'success';
         }
 
+        console.log(this.targetPlayer.username);
+
+        // Envoyer la réponse au serveur
+        if (
+          this.memberGuesses &&
+          this.myUsername !== this.targetPlayer.username
+        ) {
+          this.socketService.emit('player-guess', {
+            partyId: this.partyId,
+            playerId: this.myUserId,
+            isCorrect: this.memberGuesses.id === this.targetPlayer.id,
+          });
+        }
+
+        this.socketService
+          .listen('scores-updated')
+          .subscribe((membersScores) => {
+            const myScore = membersScores.find(
+              (member: any) => member.id === this.myUserId
+            )?.score;
+            if (myScore !== undefined) {
+              this.playerScores = myScore;
+            }
+          });
         console.log('Fin du temps de supposition');
+        console.log(this.members);
+
         setTimeout(() => {
           this.currentManche++; // Incrémenter le numéro de la manche actuelle
           if (this.currentManche <= this.totalManches) {
             this.startManche(); // Commence la manche suivante
           } else {
             console.log('Fin de la partie !');
+            this.router.navigate(['/classement'], {
+              queryParams: { id: this.partyId, isHost: this.isHost },
+            });
             // Ajouter ici la logique de fin de partie
           }
         }, 5000); // 5 secondes
