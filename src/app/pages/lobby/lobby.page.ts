@@ -125,9 +125,17 @@ export class LobbyPage implements OnInit {
       },
     });
 
-    this.isReady = true;
-    return await modal.present();
-    // Si l'utilisateur confirme, exécutez la méthode setReady()
+    // Présenter le modal
+    await modal.present();
+
+    // Attendre que le modal soit fermé
+    const { data } = await modal.onDidDismiss();
+
+    // Mettre à jour l'état isReady basé sur les données renvoyées par le modal
+    if (data?.isReady) {
+      this.isReady = true;
+      // Effectuer d'autres actions si nécessaire
+    }
   }
 
   public launchParty() {

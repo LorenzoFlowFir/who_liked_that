@@ -69,7 +69,7 @@ export class PartyPage implements OnInit, OnDestroy {
   private subscriptionsInitialized: boolean = false;
 
   public playerGuesses: { [key: string]: string } = {};
-  public guessingTimeOver: boolean = false;
+  public guessingTimeOver: boolean = true;
 
   public timeLeft: number = 15; // Temps en secondes
 
@@ -129,7 +129,19 @@ export class PartyPage implements OnInit, OnDestroy {
                   this.targetTrack = this.mancheService.getRandomTrack(
                     this.targetPlaylist
                   );
-                  console.log(this.targetTrack);
+
+                  //Supprime la musique cible de la playlist du joueur cible
+                  this.playlists.find(
+                    (playlist) =>
+                      playlist.userId === this.targetPlayer.idSpotify
+                  )!.tracks = this.playlists
+                    .find(
+                      (playlist) =>
+                        playlist.userId === this.targetPlayer.idSpotify
+                    )
+                    ?.tracks.filter(
+                      (track: any) => track.id !== this.targetTrack?.id
+                    );
 
                   //Joue la musique cible
                   this.mancheService.playTrack(this.targetTrack);
@@ -160,6 +172,7 @@ export class PartyPage implements OnInit, OnDestroy {
       .listen('voting-started')
       .subscribe(() => {
         this.startVoting();
+        this.guessingTimeOver = false;
       });
 
     this.updateHiddenSub = this.socketService
@@ -187,7 +200,7 @@ export class PartyPage implements OnInit, OnDestroy {
     // Vérifiez si le nombre actuel de manches est inférieur ou égal au total prévu
     if (this.currentManche <= this.totalManches) {
       // Réinitialiser les états pour la nouvelle manche
-      this.guessingTimeOver = false;
+      this.guessingTimeOver = true;
       this.votingStarted = false;
       this.hidden = true;
       this.timeLeft = 15; // Réinitialiser le chronomètre
@@ -214,6 +227,13 @@ export class PartyPage implements OnInit, OnDestroy {
               ': Lecture de ' +
               this.targetTrack.name
           );
+
+          //Supprime la musique cible de la playlist du joueur cible
+          this.playlists.find(
+            (playlist) => playlist.userId === this.targetPlayer.idSpotify
+          )!.tracks = this.playlists
+            .find((playlist) => playlist.userId === this.targetPlayer.idSpotify)
+            ?.tracks.filter((track: any) => track.id !== this.targetTrack?.id);
 
           // Jouer la musique cible
           this.mancheService.playTrack(this.targetTrack);

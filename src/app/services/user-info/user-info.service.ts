@@ -152,4 +152,56 @@ export class UserInfoService {
   public getCurrentUser(): User | undefined {
     return this.currentUser;
   }
+
+  public async incrementUserGames(idUtilisateur: string) {
+    try {
+      const userRef = doc(this.firestore, 'Joueur', idUtilisateur);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const userData: any = userSnap.data();
+        await setDoc(
+          userRef,
+          { ...userData, nb_parties: (userData.nb_parties || 0) + 1 },
+          { merge: true }
+        );
+        console.log(
+          `Nombre de parties mis à jour pour l'utilisateur ${idUtilisateur}`
+        );
+      } else {
+        console.log(`Utilisateur ${idUtilisateur} introuvable dans Firestore`);
+      }
+    } catch (error) {
+      console.error(
+        "Erreur lors de la mise à jour du nombre de parties de l'utilisateur :",
+        error
+      );
+    }
+  }
+
+  public async incrementUserVictory(idUtilisateur: string) {
+    try {
+      const userRef = doc(this.firestore, 'Joueur', idUtilisateur);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const userData: any = userSnap.data();
+        await setDoc(
+          userRef,
+          { ...userData, nb_victoires: (userData.nb_victoires || 0) + 1 },
+          { merge: true }
+        );
+        console.log(
+          `Nombre de parties mis à jour pour l'utilisateur ${idUtilisateur}`
+        );
+      } else {
+        console.log(`Utilisateur ${idUtilisateur} introuvable dans Firestore`);
+      }
+    } catch (error) {
+      console.error(
+        "Erreur lors de la mise à jour du nombre de parties de l'utilisateur :",
+        error
+      );
+    }
+  }
 }

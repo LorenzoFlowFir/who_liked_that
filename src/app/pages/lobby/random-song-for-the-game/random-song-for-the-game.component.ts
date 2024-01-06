@@ -70,25 +70,14 @@ export class RandomSongForTheGameComponent implements OnInit {
         playlist: this.playlist,
       });
       this.isReady = true;
-      this.modalController.dismiss();
+      // Fermer le modal et passer les données
+      this.modalController.dismiss({ isReady: true });
     } else {
       console.error(
         'setReady was called but partyId or playlist is not defined'
       );
     }
   }
-
-  // public test() {
-  //   import SpotifyWebApi from 'spotify-web-api-js';
-  //   public spotifyWebApi = new SpotifyWebApi();
-  // ! POUR PLAY UNE MUSIQUE
-  //   if (this.playlist) {
-  //     let music = this.playlist.liked_song[0];
-  //     this.spotifyWebApi.play({
-  //       uris: [`spotify:track:${music.id}`],
-  //     });
-  //   }
-  // }
 
   closeModal() {
     this.modalController.dismiss();

@@ -6,6 +6,7 @@ import {
   IonContent,
   IonButton,
   IonIcon,
+  IonLoading,
 } from '@ionic/angular/standalone';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
@@ -34,6 +35,7 @@ import { environment } from '../../../environments/environment';
     RandLikedSongComponent,
     UserInfoComponent,
     JoinPartyButtonComponent,
+    IonLoading,
     CreatePartyButtonComponent,
   ],
 })
@@ -62,6 +64,7 @@ export class HomePage implements OnInit {
   public user: User | undefined;
   public playlist: Playlist | undefined;
   public displayButton = true;
+  public waiter = true;
 
   constructor(private socketService: SocketService) {}
 
@@ -90,5 +93,9 @@ export class HomePage implements OnInit {
 
       this.socketService.emit('testEvent', { message: 'Hello from client!' });
     }
+
+    setTimeout(() => {
+      this.waiter = false;
+    }, 2500);
   }
 }

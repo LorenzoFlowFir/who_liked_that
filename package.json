@@ -29,6 +29,7 @@
     "@capacitor/keyboard": "5.0.6",
     "@capacitor/status-bar": "5.0.6",
     "@ionic/angular": "^7.5.0",
+    "firebase": "^10.7.1",
     "ionicons": "^7.2.1",
     "rxjs": "~7.8.0",
     "socket.io-client": "^4.7.2",

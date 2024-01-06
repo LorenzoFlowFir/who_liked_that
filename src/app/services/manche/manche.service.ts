@@ -31,8 +31,6 @@ export class MancheService {
   public getRandomTrack(playlist: any): Track {
     let randomIndex = Math.floor(Math.random() * playlist.tracks.length);
     let randomTrack = playlist.tracks[randomIndex];
-    playlist.tracks.splice(randomIndex, 1);
-    console.log(playlist);
 
     return randomTrack;
   }
