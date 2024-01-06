@@ -1,7 +1,0 @@
-{
-  "name": "who_liked_that",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}
