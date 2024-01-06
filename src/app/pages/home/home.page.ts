@@ -5,9 +5,19 @@ import {
   IonTitle,
   IonContent,
   IonButton,
+  IonIcon,
+  IonLoading,
 } from '@ionic/angular/standalone';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
+import { RandLikedSongComponent } from './rand-liked-song/rand-liked-song.component';
+import { UserInfoComponent } from './user-info/user-info.component';
+import { User } from '../../models/user.model';
+import { Playlist } from '../../models/playlist.model';
+import { SocketService } from '../../services/socket/socket.service';
+import { JoinPartyButtonComponent } from './join-party-button/join-party-button.component';
+import { CreatePartyButtonComponent } from './create-party-button/create-party-button.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +31,12 @@ import { CommonModule } from '@angular/common';
     IonContent,
     IonButton,
     CommonModule,
+    IonIcon,
+    RandLikedSongComponent,
+    UserInfoComponent,
+    JoinPartyButtonComponent,
+    IonLoading,
+    CreatePartyButtonComponent,
   ],
 })
 export class HomePage implements OnInit {
@@ -43,26 +59,43 @@ export class HomePage implements OnInit {
   }&redirect_uri=${this.REDIRECT_URI}&scope=${this.SCOPES.join(
     '%20'
   )}&response_type=token&show_dialog=true`;
-
+  public accessToken: any;
   public isDisconnected = true;
+  public user: User | undefined;
+  public playlist: Playlist | undefined;
+  public displayButton = true;
+  public waiter = true;
+
+  constructor(private socketService: SocketService) {}
 
   public loginWithSpotify() {
     window.location.href = this.authorizeUrl;
   }
 
+  onUserChanged(newUser: User) {
+    this.user = newUser;
+  }
+
+  onPlaylistChanged(newPlaylist: Playlist) {
+    this.playlist = newPlaylist;
+  }
+
   ngOnInit() {
     const hashParams = new URLSearchParams(window.location.hash.substr(1));
     if (hashParams.has('access_token')) {
-      const accessToken = hashParams.get('access_token');
+      this.accessToken = hashParams.get('access_token');
       this.isDisconnected = false;
+      environment.accesToken = this.accessToken;
 
-      // this.randomlikeService
-      //   .getLikedTracksAndPlayRandomTrack(accessToken)
-      //   .then(() => {
-      //     this.randomlikeService.displayLikedTrack();
-      //   });
+      this.socketService.listen('testEvent').subscribe((data) => {
+        console.log(data);
+      });
+
+      this.socketService.emit('testEvent', { message: 'Hello from client!' });
     }
-    console.log('hashParams', hashParams);
-    
+
+    setTimeout(() => {
+      this.waiter = false;
+    }, 2500);
   }
 }
