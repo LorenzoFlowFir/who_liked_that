@@ -5,12 +5,43 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item *ngFor="let member of members; let i = index">
-      <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
-      <ion-badge slot="end">{{ member?.score }}</ion-badge>
-    </ion-item>
-  </ion-list>
+
+
+    <ion-list>
+      @for (member of members; track member; let i = $index) {
+        @switch (i) {
+          @case (0) {
+            <ion-item class="tamere">
+              <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
+              <ion-badge slot="end">{{ member?.score }}</ion-badge>
+              <ion-img slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+          @case (1) {
+            <ion-item class="tamere">
+              <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
+              <ion-badge slot="end">{{ member?.score }}</ion-badge>
+              <ion-img slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+          @case (2) {
+            <ion-item class="tamere">
+              <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
+              <ion-badge slot="end">{{ member?.score }}</ion-badge>
+              <ion-img slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+          @default {
+            <ion-item class="tamere1">
+              <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
+              <ion-badge slot="end">{{ member?.score }}</ion-badge>
+              <ion-img slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+        }
+      } @empty { Empty list of users }
+    </ion-list>
+
 
   <ion-button (click)="backHome()">Retour à l'écran d'accueil</ion-button>
 </ion-content>
