@@ -5,10 +5,10 @@
 </ion-header>
 
 <ion-content>
-  <h1>Code d'invitation : {{ partyId }}</h1>
+  <h1 class="text-center">Code d'invitation : {{ partyId }}</h1>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Participants</ion-card-title>
+      <ion-card-title class="ion-text-center">Participants</ion-card-title>
     </ion-card-header>
     <ion-card-content *ngFor="let member of members">
       <ion-item
@@ -27,14 +27,18 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-button *ngIf="!isReady" (click)="showConfirmReadyModal()"
-    >Je suis prêt</ion-button
-  >
-  <ion-button
-    *ngIf="isHost && isReady"
-    (click)="launchParty()"
-    [disabled]="showStartGameButton"
-    >Lancer la Partie</ion-button
-  >
-  <ion-button (click)="leaveParty()">Quitter la Partie</ion-button>
+  <div class="button-container ion-text-center">
+
+    <ion-button *ngIf="!isReady" (click)="showConfirmReadyModal()" 
+    >Je suis prêt</ion-button>
+
+    <ion-button
+      *ngIf="isHost && isReady"
+      (click)="launchParty()"
+      [disabled]="showStartGameButton"
+      >Lancer la Partie</ion-button>
+      
+    <ion-button (click)="leaveParty()" color="danger">Quitter la Partie</ion-button>
+  </div>
+  
 </ion-content>
