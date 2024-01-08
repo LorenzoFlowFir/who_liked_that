@@ -160,4 +160,7 @@ export class LobbyPage implements OnInit {
       this.router.navigate(['/home']); // Naviguez vers la page d'accueil
     }
   }
+  getStatusColorClass(isReady: boolean): string {
+    return isReady ? 'ready-status' : 'not-ready-status';
+  }
 }

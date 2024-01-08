@@ -12,18 +12,18 @@
     </ion-card-header>
     <ion-card-content *ngFor="let member of members">
       <ion-item
-        class="itemForPlayers"
-        color="none"
-        style="background-color: #25aa54a8"
-        lines="none"
-      >
-        <ion-thumbnail slot="start">
-          <ion-img [src]="member.profilPicture"></ion-img>
-        </ion-thumbnail>
-        <ion-label>
-          {{ member.username }} - {{ member.isReady ? 'Prêt' : 'Pas prêt' }}
-        </ion-label>
-      </ion-item>
+  class="itemForPlayers"
+  color="none"
+  [ngClass]="getStatusColorClass(member.isReady)"
+  lines="none"
+>
+  <ion-thumbnail slot="start">
+    <ion-img [src]="member.profilPicture"></ion-img>
+  </ion-thumbnail>
+  <ion-label>
+    {{ member.username }} - {{ member.isReady ? 'Prêt' : 'Pas prêt' }}
+  </ion-label>
+</ion-item>
     </ion-card-content>
   </ion-card>
 

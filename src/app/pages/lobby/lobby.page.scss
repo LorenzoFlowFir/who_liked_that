@@ -16,3 +16,10 @@
   text-align: center;
 }
 
+.ready-status {
+  background-color: #1db954; /* Vert lorsque le statut est Prêt */
+}
+
+.not-ready-status {
+  background-color: #eb445a; /* Rouge lorsque le statut est Pas prêt */
+}
