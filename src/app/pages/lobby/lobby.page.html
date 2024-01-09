@@ -18,7 +18,7 @@
   lines="none"
 >
   <ion-thumbnail slot="start">
-    <ion-img [src]="member.profilPicture"></ion-img>
+    <ion-img [src]="member.profilPicture" style="border-radius: 10px;"></ion-img>
   </ion-thumbnail>
   <ion-label class="ion-text-center">
     {{ member.username }} - {{ member.isReady ? 'Prêt' : 'Pas prêt' }}
