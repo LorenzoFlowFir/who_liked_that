@@ -10,6 +10,9 @@
     <br />
     <small>Voulez-vous charger d'autres titres ou valider cela ?</small>
   </div>
-  <div id="liked-track"></div>
-  <ion-button *ngIf="!isReady" (click)="setReady()">Valider</ion-button>
+  <div id="liked-track" class="ion-text-center"></div>
+  <div class="ion-text-center">
+    <ion-button *ngIf="!isReady" (click)="setReady()" class="ion-justify-content-center">Valider</ion-button>
+  </div>
+  
 </ion-content>
