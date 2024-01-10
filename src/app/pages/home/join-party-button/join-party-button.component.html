@@ -1,5 +1,9 @@
+<hr class="ligne">
+
 <ion-input
+  id="id_input"
   [(ngModel)]="partyId"
   placeholder="Entrez l'ID de la partie"
 ></ion-input>
-<ion-button (click)="joinParty()">Rejoindre la Partie</ion-button>
+
+<ion-button id="join-party" expand="block" (click)="joinParty()">Rejoindre la Partie</ion-button>
