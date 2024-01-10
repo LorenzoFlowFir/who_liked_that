@@ -1,7 +1,7 @@
 <ion-card>
-  <h1>Bienvenue {{ user?.nom }}</h1>
+  <h1 id="titre_profil">Bienvenue {{ user?.nom }}</h1>
   <ion-img [src]="user?.photo_profil"> </ion-img>
-  <ion-card-content>
+  <ion-card-content id="texte_profil">
     {{ user?.nb_parties }} parties jouées | {{ user?.nb_victoires }} victoires
   </ion-card-content>
 </ion-card>
