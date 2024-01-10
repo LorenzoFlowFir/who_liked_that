@@ -6,13 +6,24 @@
 </ion-header>
 <ion-content class="pad">
   <div class="center text">
-    <small>Voici les titres que vous allez joué pendant la partie.</small>
-    <br />
-    <small>Voulez-vous charger d'autres titres ou valider cela ?</small>
+    <small>Voici les titres qui seront associé a vous pendant la partie.</small>
   </div>
-  <div id="liked-track" class="ion-text-center"></div>
-  <div class="ion-text-center">
-    <ion-button *ngIf="!isReady" (click)="setReady()" class="ion-justify-content-center">Valider</ion-button>
+  <div id="liked-track" class="ion-text-center">
+    <ion-loading id="loading" content="Chargement..." [isOpen]="isLoading">
+    </ion-loading>
   </div>
-  
+  <div id="btnslot" class="ion-text-center">
+    <ion-button
+      *ngIf="!isReady"
+      (click)="setReady()"
+      class="ion-justify-content-center"
+      >Valider</ion-button
+    >
+    <ion-button
+      *ngIf="!isReady"
+      (click)="getPlaylist()"
+      class="ion-justify-content-center"
+      >Charger d'autres musiques</ion-button
+    >
+  </div>
 </ion-content>

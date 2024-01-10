@@ -14,8 +14,13 @@
   transform: scale(0.5);
 }
 
+#btnslot {
+  margin-top: 5%;
+}
+
 .text {
   text-align: center; /* Centrer le texte horizontalement */
-  margin: 20px; /* Ajouter une marge de 20 pixels autour du texte */
-  font-size : 20px
+  margin-bottom: 10px; /* Ajouter une marge de 20 pixels autour du texte */
+  font-size: 19px;
+  color: #c0c0c0;
 }
