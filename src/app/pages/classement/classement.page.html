@@ -5,43 +5,95 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
-
-    <ion-list>
+    <ion-list class="list-classement-top1">
       @for (member of members; track member; let i = $index) {
         @switch (i) {
           @case (0) {
-            <ion-item class="tamere">
-              <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
-              <ion-badge slot="end">{{ member?.score }}</ion-badge>
-              <ion-img slot="start" [src]="member?.profilPicture"></ion-img> 
+            <ion-item lines="none" class="item-pp">
+              <ion-img class="imgclassementtop" slot="start" [src]="member?.profilPicture"></ion-img> 
             </ion-item>
-          }
-          @case (1) {
-            <ion-item class="tamere">
-              <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
-              <ion-badge slot="end">{{ member?.score }}</ion-badge>
-              <ion-img slot="start" [src]="member?.profilPicture"></ion-img> 
+            <!-- <ion-item lines="none" class="item-text item-top">
+              <ion-label>Top {{ i + 1 }}</ion-label>            
+            </ion-item> -->
+            <ion-item lines="none" class="item-text item-username">
+              <ion-label id="label-username">{{ member?.username }}</ion-label>            
             </ion-item>
-          }
-          @case (2) {
-            <ion-item class="tamere">
-              <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
-              <ion-badge slot="end">{{ member?.score }}</ion-badge>
-              <ion-img slot="start" [src]="member?.profilPicture"></ion-img> 
+            <ion-item lines="none" class="item-score">
+              <ion-badge class="item-score1"slot="end">Score : {{ member?.score }}</ion-badge>
             </ion-item>
-          }
-          @default {
-            <ion-item class="tamere1">
-              <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
-              <ion-badge slot="end">{{ member?.score }}</ion-badge>
-              <ion-img slot="start" [src]="member?.profilPicture"></ion-img> 
-            </ion-item>
+            
           }
         }
       } @empty { Empty list of users }
     </ion-list>
 
+    <ion-list class="list-classement-top2">
+      @for (member of members; track member; let i = $index) {
+        @switch (i) {
+          @case (1) {
+            <ion-item lines="none" class="top2">
+                <ion-item lines="none" class="item-pp">
+                    <ion-img class="imgclassementtop" slot="start" [src]="member?.profilPicture"></ion-img> 
+                  </ion-item>
+                  <!-- <ion-item lines="none" class="item-text item-top">
+                    <ion-label>Top {{ i + 1 }}</ion-label>            
+                  </ion-item> -->
+                  <ion-item lines="none" class="item-text item-username2">
+                    <ion-label id="label-username">{{ member?.username }}</ion-label>            
+                  </ion-item>
+                  <ion-item lines="none" class="item-score2">
+                    <ion-badge class="item-score1"slot="end">Score : {{ member?.score }}</ion-badge>
+                  </ion-item>
+            </ion-item>
+          }
+          @case (2) {
+            <ion-item lines="none" class="top2">
+              <ion-item lines="none" class="item-pp">
+                  <ion-img class="imgclassementtop" slot="start" [src]="member?.profilPicture"></ion-img> 
+                </ion-item>
+                <!-- <ion-item lines="none" class="item-text item-top">
+                  <ion-label>Top {{ i + 1 }}</ion-label>            
+                </ion-item> -->
+                <ion-item lines="none" class="item-text item-username2">
+                  <ion-label id="label-username">{{ member?.username }}</ion-label>            
+                </ion-item>
+                <ion-item lines="none" class="item-score2">
+                  <ion-badge class="item-score1"slot="end">Score : {{ member?.score }}</ion-badge>
+                </ion-item>
+          </ion-item>
+          }
+
+        }
+      } @empty { Empty list of users }
+    </ion-list>
+
+    <ion-list lines="none" class="list-classement">
+      @for (member of members; track member; let i = $index) {
+        @switch (i) {
+          @case (3) {
+            <ion-item class="item-classement">
+              <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
+              <ion-badge slot="end">Score : {{ member?.score }}</ion-badge>
+              <ion-img class="imgclassement" slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+          @case (4) {
+            <ion-item lines="none"class="item-classement">
+              <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
+              <ion-badge slot="end">Score : {{ member?.score }}</ion-badge>
+              <ion-img class="imgclassement" slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+          @case (5) {
+            <ion-item lines="none" class="item-classement">
+              <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
+              <ion-badge slot="end">Score : {{ member?.score }}</ion-badge>
+              <ion-img class="imgclassement" slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+        }
+      } @empty { Empty list of users }
+    </ion-list>
 
   <ion-button (click)="backHome()">Retour à l'écran d'accueil</ion-button>
 </ion-content>

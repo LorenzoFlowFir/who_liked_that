@@ -1,0 +1,78 @@
+ion-content.ios.overscroll.content-ltr {
+    width: 400px;
+}
+
+
+ion-img::part(image) {
+    border-radius: 100%;
+  }
+
+ion-img.imgclassementtop.ios {
+    width: 110px;
+}
+
+ion-img.imgclassement.ios {
+    width: 60px;
+}
+
+
+
+
+/* TOP 1 */
+
+ion-list.list-classement-top1.ios.list-ios {
+    display: flex;
+    margin: 10px 0 0;
+    flex-direction: column;
+    align-items: center;
+}
+
+ion-item.item-pp{
+    justify-content: center;
+    width: 200px;
+    height: 7em;
+}
+
+ion-item.item-username{
+    width: 20em;
+    text-align: center;
+    font-size: larger;
+    font-weight: bold;    
+}
+
+
+ion-label#label-username {
+    margin-inline: 0px 0px;
+}
+
+ion-badge.item-score1.ios {
+    font-size: medium;
+}
+ion-item.item-score{
+    top: -0.5em;
+}
+
+// TOP 2 3
+
+ion-list.list-classement-top2.ios.list-ios {
+    display: flex;
+    flex-direction: row;
+}
+
+ion-item.item-username2{
+    width: 20em;
+    text-align: center;
+    font-size: medium;
+    font-weight: bold;    
+}
+
+ion-item.item-score2{
+    left: 18px;
+}
+
+
+// TOP NUL
+
+ion-list.list-classement.ios.list-ios {
+    margin-top: 30px;
+}

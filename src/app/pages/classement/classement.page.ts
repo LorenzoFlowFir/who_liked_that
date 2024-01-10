@@ -73,10 +73,10 @@ export class ClassementPage implements OnInit {
       idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
       profilPicture:
         'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
-      score: 10,
+      score: 25,
     },
     {
-      id: '2',
+      id: '4',
       username: 'Lorenzofir',
       idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
       profilPicture:
@@ -84,28 +84,12 @@ export class ClassementPage implements OnInit {
       score: 25,
     },
     {
-      id: '3',
-      username: 'Lorenzofir',
-      idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
-      profilPicture:
-        'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
-      score: 10,
-    },
-    {
-      id: '2',
+      id: '5',
       username: 'Lorenzofir',
       idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
       profilPicture:
         'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
       score: 25,
-    },
-    {
-      id: '3',
-      username: 'Lorenzofir',
-      idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
-      profilPicture:
-        'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
-      score: 10,
     },
   ];
 
