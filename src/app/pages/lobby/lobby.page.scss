@@ -6,3 +6,20 @@
   color: #25aa54a8;
   background-color: aqua;
 }
+
+.button-container {
+  text-align: center; /* Centrer le contenu horizontalement */
+  margin-top: 20px; /* Ajouter un espace au-dessus des boutons */
+}
+
+.text-center {
+  text-align: center;
+}
+
+.ready-status {
+  background-color: #1db954; /* Vert lorsque le statut est Prêt */
+}
+
+.not-ready-status {
+  background-color: #eb445a; /* Rouge lorsque le statut est Pas prêt */
+}
