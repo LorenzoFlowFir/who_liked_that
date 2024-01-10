@@ -7,6 +7,8 @@ import {
   IonButtons,
   IonContent,
   ModalController,
+  IonModal,
+  IonLoading,
 } from '@ionic/angular/standalone';
 import { LikedSongService } from '../../../services/liked-song/liked-song.service';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
@@ -28,6 +30,8 @@ import { CommonModule } from '@angular/common';
     IonContent,
     IonButtons,
     CommonModule,
+    IonModal,
+    IonLoading,
   ],
 })
 export class RandomSongForTheGameComponent implements OnInit {
@@ -35,6 +39,8 @@ export class RandomSongForTheGameComponent implements OnInit {
   public isReady: boolean = false;
   @Input() partyId!: string;
   public playlist: Playlist | undefined;
+  public isLoading: boolean = this.likedSongService.isLoading;
+  public tracks: Playlist | boolean = false;
 
   constructor(
     private modalController: ModalController,
@@ -49,13 +55,17 @@ export class RandomSongForTheGameComponent implements OnInit {
     if (this.user) {
       this.likedSongService.GetPlaylistFromDB(this.user.id).then((tracks) => {
         if (tracks && typeof tracks !== 'boolean') {
+          this.tracks = tracks;
           this.likedSongService
             .get10RandomTracksFromPlaylist(tracks)
             .then((playlist) => {
+              this.isLoading = true;
+
               this.likedSongService
                 .displayLikedTrack(tracks, playlist)
                 .then((playlist) => {
                   this.playlist = playlist;
+                  this.isLoading = false;
                 });
             });
         }
@@ -76,6 +86,25 @@ export class RandomSongForTheGameComponent implements OnInit {
       console.error(
         'setReady was called but partyId or playlist is not defined'
       );
+    }
+  }
+
+  public getPlaylist() {
+    if (this.tracks && typeof this.tracks !== 'boolean') {
+      this.likedSongService
+        .get10RandomTracksFromPlaylist(this.tracks)
+        .then((playlist) => {
+          this.isLoading = true;
+
+          if (this.tracks && typeof this.tracks !== 'boolean') {
+            this.likedSongService
+              .displayLikedTrack(this.tracks, playlist)
+              .then((playlist) => {
+                this.playlist = playlist;
+                this.isLoading = false;
+              });
+          }
+        });
     }
   }
 

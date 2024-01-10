@@ -14,6 +14,10 @@ import {
 import { User } from '../../models/user.model';
 import { Playlist } from '../../models/playlist.model';
 import { UserInfoService } from '../user-info/user-info.service';
+import { RandomSongForTheGameComponent } from 'src/app/pages/lobby/random-song-for-the-game/random-song-for-the-game.component';
+import { ModalController } from '@ionic/angular/standalone';
+import { ModalContentComponent } from 'src/shared/modal-content/modal-content.component';
+import { SongDetailComponent } from 'src/app/pages/lobby/random-song-for-the-game/song-detail/song-detail.component';
 
 @Injectable({
   providedIn: 'root',
@@ -26,9 +30,13 @@ export class LikedSongService {
   public loader = false;
   public firestore: Firestore = inject(Firestore);
 
-  constructor(private userInfoService: UserInfoService) {}
+  constructor(
+    private userInfoService: UserInfoService,
+    private modalController: ModalController
+  ) {}
 
   public spotifyWebApi = new SpotifyWebApi();
+  public isLoading = true;
 
   public async addToQueue(trackId: any) {
     const hashParams = new URLSearchParams(window.location.hash.substr(1));
@@ -207,7 +215,6 @@ export class LikedSongService {
 
   public async displayLikedTrack(allTracks: Playlist, newPlaylist: Playlist) {
     const likedTrackDiv = document.getElementById('liked-track');
-
     if (likedTrackDiv) {
       likedTrackDiv.innerHTML = ' ';
     } else {
@@ -230,6 +237,9 @@ export class LikedSongService {
       img.alt = `Cover de ${music.name} - ${music.artist}`;
       img.style.width = '50px';
       img.style.marginRight = '10px'; // Espace entre l'image et le texte
+      img.addEventListener('click', () => {
+        this.showTrackDetailsModal(music);
+      });
 
       // Ajoutez l'image au conteneur
       trackContainer.appendChild(img);
@@ -248,20 +258,37 @@ export class LikedSongService {
       likedTrackDiv?.appendChild(trackContainer);
     }
 
-    const btnRefrshLike = document.createElement('ion-button');
-    btnRefrshLike.classList.add('btn');
-    btnRefrshLike.classList.add('btn-primary');
-    btnRefrshLike.textContent = "Charger d'autres musiques";
-    btnRefrshLike.id = 'reload-liked';
-    btnRefrshLike.addEventListener('click', () =>
-      this.get10RandomTracksFromPlaylist(allTracks).then((playlist) => {
-        this.displayLikedTrack(allTracks, playlist);
-      })
-    );
-    likedTrackDiv?.appendChild(btnRefrshLike);
-    console.log(newPlaylist);
+    // const btnRefrshLike = document.createElement('ion-button');
+    // btnRefrshLike.classList.add('btn');
+    // btnRefrshLike.classList.add('btn-primary');
+    // btnRefrshLike.textContent = "Charger d'autres musiques";
+    // btnRefrshLike.id = 'reload-liked';
+    // btnRefrshLike.addEventListener('click', () =>
+    //   this.get10RandomTracksFromPlaylist(allTracks).then((playlist) => {
+    //     this.isLoading = true;
+    //     document.getElementById('btnslot')?.removeChild(btnRefrshLike);
+    //     this.displayLikedTrack(allTracks, playlist);
+    //   })
+    // );
 
+    // document.getElementById('btnslot')?.appendChild(btnRefrshLike);
+    console.log(newPlaylist);
+    this.isLoading = false;
     return newPlaylist;
+  }
+
+  private async showTrackDetailsModal(track: Track) {
+    // Afficher un modal de confirmation ici
+    const modal = await this.modalController.create({
+      component: SongDetailComponent,
+      cssClass: 'detail-song',
+      componentProps: {
+        track: track, // Passez "partyId" comme propriété au modal
+      },
+    });
+
+    // Présenter le modal
+    return modal.present();
   }
 
   //Getter et setter curent AllTracks
