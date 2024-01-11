@@ -133,15 +133,12 @@ export class LobbyPage implements OnInit {
     this.socketService.listen('all-players-ready').subscribe((playlists) => {
       // Stocker la grande playlist consolidée
       this.grandePlaylist = playlists;
-      this.showStartGameButton = false;
       // Afficher le bouton "Lancer la partie"
-      //!POUR JOUER QU'A PARTIR DE 3 JOUEURS
-      // if (this.members.length > 2) {
-      //   this.tailleJoueursErreur = false;
-      //
-      // } else {
-      //   this.tailleJoueursErreur = true;
-      // }
+      if (this.members.length > 2) {
+        this.tailleJoueursErreur = false;
+      } else {
+        this.tailleJoueursErreur = true;
+      }
     });
   }
 
