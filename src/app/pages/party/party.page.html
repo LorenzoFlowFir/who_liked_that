@@ -6,9 +6,11 @@
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">party</ion-title>
-      <h2>Manche : {{currentManche}}/10 Points : {{ playerScores }}</h2>
+    <ion-toolbar >
+      <div id="titre-party">
+      <ion-title size="large">Manche : {{currentManche}}/10</ion-title>
+      <h2 class="text-right"> {{ playerScores }} Points </h2>
+      </div>
     </ion-toolbar>
   </ion-header>
 
@@ -30,36 +32,38 @@
 
     @if (isHost && hidden ) {
     <ion-card-content *ngIf="isHost" class="detailSong">
+      <ion-text id="blur">Texte flou</ion-text>
       <ion-button (click)="toggleHidden()" class="round-button">
         <ion-icon [name]="hidden ? 'eye-sharp' : 'eye-off-sharp'"></ion-icon>
       </ion-button>
     </ion-card-content>
     }@else if (isHost && !hidden) {
     <ion-card-content *ngIf="!hidden" class="detailSong">
-      {{targetTrack?.name}} {{targetTrack?.artist}}
+      <ion-text class="break-word">{{targetTrack?.name}} - {{targetTrack?.artist}}</ion-text>
       <ion-button (click)="toggleHidden()" class="round-button">
         <ion-icon [name]="hidden ? 'eye-sharp' : 'eye-off-sharp'"></ion-icon>
       </ion-button>
     </ion-card-content>
     }@else if (!hidden) {
     <ion-card-content *ngIf="!hidden">
-      {{targetTrack?.name}} {{targetTrack?.artist}}
+      <ion-text class="break-word">{{targetTrack?.name}} - {{targetTrack?.artist}}</ion-text>
     </ion-card-content>
     }
   </ion-card>
   <!-- Ajoutez un bouton pour démarrer le vote -->
-  <ion-button *ngIf="isHost && !votingStarted" (click)="triggerVoting()">
+  <ion-button id="bouton-vote" expand="block" *ngIf="isHost && !votingStarted" (click)="triggerVoting()">
     <b>VOTEZ !</b>
   </ion-button>
 
   <!-- Affichez les noms des joueurs et le chrono seulement si votingStarted est true -->
-  <div *ngIf="votingStarted">
+  <div class="conteneur-membre" *ngIf="votingStarted">
     <ng-container *ngFor="let member of members">
       <ion-button
         *ngIf="member.username !== myUsername"
+        class="bouton-membre"
         [color]="getColor(member)"
-        (click)="guessPlayer(member)"
-      >
+          (click)="guessPlayer(member)"
+        >
         {{ member?.username }}
       </ion-button>
     </ng-container>
