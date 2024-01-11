@@ -18,6 +18,10 @@ import {
   IonThumbnail,
   IonImg,
   IonLabel,
+  IonText,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocketService } from '../../services/socket/socket.service';
@@ -50,6 +54,10 @@ import { Playlist } from 'src/app/models/playlist.model';
     IonThumbnail,
     IonImg,
     IonLabel,
+    IonText,
+    IonGrid,
+    IonRow,
+    IonCol,
   ],
 })
 export class LobbyPage implements OnInit {
@@ -60,7 +68,11 @@ export class LobbyPage implements OnInit {
   public isHost: boolean = false;
   public isReady: boolean = false;
   public showStartGameButton: boolean = true;
+  public tailleJoueursErreur: boolean = false;
   public grandePlaylist: any;
+
+  public maxPlayers: number = 8;
+  public playerSlots: any[] = new Array(this.maxPlayers).fill(null);
 
   constructor(
     private route: ActivatedRoute,
@@ -92,6 +104,7 @@ export class LobbyPage implements OnInit {
         console.log('Joined Party:', members);
 
         this.members = members;
+        this.updatePlayerSlots(members);
 
         if (!this.showStartGameButton) {
           this.showStartGameButton = true;
@@ -102,6 +115,7 @@ export class LobbyPage implements OnInit {
       .listen('updated-party-members')
       .subscribe((members) => {
         this.members = members;
+        this.updatePlayerSlots(members);
       });
 
     this.socketService.listen('party-launched').subscribe(() => {
@@ -115,7 +129,22 @@ export class LobbyPage implements OnInit {
       // Stocker la grande playlist consolidée
       this.grandePlaylist = playlists;
       // Afficher le bouton "Lancer la partie"
-      this.showStartGameButton = false;
+      if (this.members.length > 2) {
+        this.tailleJoueursErreur = false;
+        this.showStartGameButton = false;
+      } else {
+        this.tailleJoueursErreur = true;
+      }
+    });
+  }
+
+  updatePlayerSlots(members: any[]) {
+    // Réinitialiser les emplacements
+    this.playerSlots.fill(null);
+
+    // Remplir les emplacements avec les informations des membres
+    members.forEach((member, index) => {
+      this.playerSlots[index] = member;
     });
   }
 

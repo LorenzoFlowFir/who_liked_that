@@ -2,6 +2,7 @@
   [fullscreen]="true"
   [style.display]="showHome ? 'block' : 'none'"
   id="home"
+  scroll-y="false"
 >
   <div id="container">
     <div class="row">
@@ -25,7 +26,12 @@
     </div>
   </div>
 </ion-content>
-<ion-content [fullscreen]="true" *ngIf="isDisconnected" id="connexion">
+<ion-content
+  [fullscreen]="true"
+  *ngIf="isDisconnected"
+  id="connexion"
+  scroll-y="false"
+>
   <div id="merde">
     <div class="row">
       <div class="col-12 text-center mb-5" id="main">
@@ -48,6 +54,7 @@
   *ngIf="!isDisconnected && showLoading && !showHome"
   [style.display]="showLoading ? 'block' : 'none'"
   id="loading"
+  scroll-y="false"
 >
   <div id="merde">
     <div class="row">

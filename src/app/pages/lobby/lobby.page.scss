@@ -9,7 +9,7 @@
 
 .button-container {
   text-align: center; /* Centrer le contenu horizontalement */
-  margin-top: 20px; /* Ajouter un espace au-dessus des boutons */
+  margin-top: -2%;
 }
 
 .text-center {
@@ -22,4 +22,15 @@
 
 .not-ready-status {
   background-color: #eb445a; /* Rouge lorsque le statut est Pas prêt */
+}
+
+ion-card-content {
+  padding-top: 0%;
+}
+
+#error {
+  //color: red;
+  text-align: center;
+  font-size: 20px;
+  margin: 0;
 }

@@ -39,75 +39,75 @@ import { UserInfoService } from 'src/app/services/user-info/user-info.service';
   ],
 })
 export class ClassementPage implements OnInit {
-  //public members: any[] = [];
+  public members: any[] = [];
 
   // * Pour tester la page sans devoir faire toute une partie
-  public members: any[] = [
-    {
-      id: '0',
-      username: 'Lorenzo Sgr',
-      idSpotify: 'lorenzofir2903',
-      profilPicture:
-        'https://i.scdn.co/image/ab6775700000ee856aee2547f831f6bacabaec97',
-      score: 75,
-    },
-    {
-      id: '1',
-      username: 'Lorenzofir',
-      idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
-      profilPicture:
-        'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
-      score: 50,
-    },
-    {
-      id: '2',
-      username: 'Lorenzofir',
-      idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
-      profilPicture:
-        'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
-      score: 25,
-    },
-    {
-      id: '3',
-      username: 'Lorenzofir',
-      idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
-      profilPicture:
-        'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
-      score: 25,
-    },
-    {
-      id: '4',
-      username: 'Lorenzofir',
-      idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
-      profilPicture:
-        'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
-      score: 25,
-    },
-    {
-      id: '5',
-      username: 'Lorenzofir',
-      idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
-      profilPicture:
-        'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
-      score: 25,
-    },
-    {
-      id: '6',
-      username: 'Lorenzofir',
-      idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
-      profilPicture:
-        'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
-      score: 25,
-    },
-    {
-      id: '7',
-      username: 'Lorenzofir',
-      idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
-      profilPicture:
-        'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
-      score: 25,
-    },
-  ];
+  // public members: any[] = [
+  //   {
+  //     id: '0',
+  //     username: 'Lorenzo Sgr',
+  //     idSpotify: 'lorenzofir2903',
+  //     profilPicture:
+  //       'https://i.scdn.co/image/ab6775700000ee856aee2547f831f6bacabaec97',
+  //     score: 75,
+  //   },
+  //   {
+  //     id: '1',
+  //     username: 'Lorenzofir',
+  //     idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
+  //     profilPicture:
+  //       'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
+  //     score: 50,
+  //   },
+  //   {
+  //     id: '2',
+  //     username: 'Lorenzofir',
+  //     idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
+  //     profilPicture:
+  //       'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
+  //     score: 25,
+  //   },
+  //   {
+  //     id: '3',
+  //     username: 'Lorenzofir',
+  //     idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
+  //     profilPicture:
+  //       'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
+  //     score: 25,
+  //   },
+  //   {
+  //     id: '4',
+  //     username: 'Lorenzofir',
+  //     idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
+  //     profilPicture:
+  //       'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
+  //     score: 25,
+  //   },
+  //   {
+  //     id: '5',
+  //     username: 'Lorenzofir',
+  //     idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
+  //     profilPicture:
+  //       'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
+  //     score: 25,
+  //   },
+  //   {
+  //     id: '6',
+  //     username: 'Lorenzofir',
+  //     idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
+  //     profilPicture:
+  //       'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
+  //     score: 25,
+  //   },
+  //   {
+  //     id: '7',
+  //     username: 'Lorenzofir',
+  //     idSpotify: '31sytxmxupm25u22g26zfxvckjmm',
+  //     profilPicture:
+  //       'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624',
+  //     score: 25,
+  //   },
+  // ];
 
   public partyId: string | null = null;
   public isHost: boolean = false;
