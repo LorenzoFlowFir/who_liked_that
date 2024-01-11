@@ -1,5 +1,5 @@
 ion-content.ios.overscroll.content-ltr {
-    width: 400px;
+    width: 25em;
 }
 
 
@@ -8,29 +8,34 @@ ion-img::part(image) {
   }
 
 ion-img.imgclassementtop.ios {
-    width: 110px;
+    width: 5em;
 }
-
-ion-img.imgclassement.ios {
-    width: 60px;
-}
-
-
 
 
 /* TOP 1 */
+ion-img.crown.ios{
+    width: 5em;
+    position: absolute;
+    top: 2.5em;
+    z-index: 2;
+    transform: rotate(-14deg);
+    left: 9em;
+}
 
 ion-list.list-classement-top1.ios.list-ios {
     display: flex;
-    margin: 10px 0 0;
+    // margin: 0.8em 0 0;
     flex-direction: column;
     align-items: center;
+    margin-top: 3.5em;
 }
 
 ion-item.item-pp{
     justify-content: center;
-    width: 200px;
-    height: 7em;
+    width: 10em;
+    height: 5.1em;
+    position: relative;
+    z-index: 1;
 }
 
 ion-item.item-username{
@@ -41,38 +46,205 @@ ion-item.item-username{
 }
 
 
+
 ion-label#label-username {
-    margin-inline: 0px 0px;
+    margin-inline: 0;
 }
 
 ion-badge.item-score1.ios {
     font-size: medium;
 }
 ion-item.item-score{
-    top: -0.5em;
+    top: -0.7em;
 }
 
 // TOP 2 3
+#crown1.ios{
+    width: 5em;
+    position: absolute;
+    top: 14.1em;
+    z-index: 2;
+    transform: rotate(-14deg);
+    left: 3.5em;
+}
+
+#crown2.ios{
+    width: 5em;
+    position: absolute;
+    top: 14.1em;
+    z-index: 2;
+    transform: rotate(14deg);
+    left: 17.5em;
+}
+
+ion-list.list-classement-top2.ios.list-ios {
+    width: 24em;
+    margin-top: 1em;
+}
+
+ion-img.imgclassement.ios {
+    width: 3.5em;
+    position: fixed;
+}
 
 ion-list.list-classement-top2.ios.list-ios {
     display: flex;
     flex-direction: row;
 }
 
-ion-item.item-username2{
-    width: 20em;
-    text-align: center;
-    font-size: medium;
-    font-weight: bold;    
+ion-item.top2{
+    right: -1em;
+}
+
+ion-item.top3{
+    right: -1em;
 }
 
 ion-item.item-score2{
-    left: 18px;
+    left: 1em;
+    top: -0.7em;
 }
 
 
 // TOP NUL
 
-ion-list.list-classement.ios.list-ios {
-    margin-top: 30px;
+ion-item.item-classement {
+    margin: 0.5em 0 1.5em 2em;
 }
+
+ion-list.list-classement.ios.list-ios {
+    width: 23em;
+    height: 22em;
+}
+
+
+ion-title.title-classement.ios.title-default {
+    height: 48em;
+}
+
+ion-label.top-nul.sc-ion-label-ios-h.sc-ion-label-ios-s.ios {
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    position: relative;
+    left: 2em;
+    top: 0.8em;
+    
+ }
+
+ ion-label.item-username3{
+    font-size: medium;
+    font-weight: bold;   
+}
+
+// BOUTON
+
+.bouton-classement-accueil{
+    position: absolute;
+    left: 6em;
+    margin-top: 1em;
+}
+
+
+
+// ANIMATION
+
+ion-img.crown.ios{
+    opacity: 0;
+    animation-name: crown;
+    animation-duration: 3s;
+    animation-delay: 9s;
+    animation-fill-mode: forwards;
+}
+
+#crown1.ios{
+    opacity: 0;
+    animation-name: crown;
+    animation-duration: 3s;
+    animation-delay: 7s;
+    animation-fill-mode: forwards;
+}
+
+#crown2.ios{
+    opacity: 0;
+    animation-name: crown;
+    animation-duration: 3s;
+    animation-delay: 5s;
+    animation-fill-mode: forwards;
+}
+
+.list-classement-top1{
+    opacity: 0;
+    animation-name: fadein;
+    animation-duration: 3s;
+    animation-delay: 9s;
+    animation-fill-mode: forwards;
+}
+
+ion-item.top2{
+    opacity: 0;
+    animation-name: fadein;
+    animation-duration: 3s;
+    animation-delay: 7s;
+    animation-fill-mode: forwards;
+}
+
+ion-item.top3{
+    opacity: 0;
+    animation-name: fadein;
+    animation-duration: 3s;
+    animation-delay: 5s;
+    animation-fill-mode: forwards;
+}
+
+
+.list-classement{
+    opacity: 0;
+    animation-name: fadein;
+    animation-duration: 3s;
+    animation-delay: 3s;
+    animation-fill-mode: forwards;
+}
+
+.bouton-classement-accueil{
+    opacity: 0;
+    animation-name: fadein;
+    animation-duration: 3s;
+    animation-delay: 7s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadein {
+    from {
+        opacity:0;
+        }
+    to {
+        opacity:1;
+    }
+}
+
+@keyframes crown {
+    from {
+        opacity:0;
+        margin-top: -3em;
+      }
+      to {
+        opacity:1;
+        margin-top: 0;
+      }
+}
+
+
+#confetti {
+    opacity: 0;
+    animation-name: fadein;
+    animation-duration: 3s;
+    animation-delay: 10s;
+    animation-fill-mode: forwards;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 2;
+  }
