@@ -80,6 +80,21 @@ export class HomePage implements OnInit {
     private loadingController: LoadingController
   ) {}
 
+  ngOnInit() {
+    const hashParams = new URLSearchParams(window.location.hash.substr(1));
+    if (hashParams.has('access_token')) {
+      this.accessToken = hashParams.get('access_token');
+      this.isDisconnected = false;
+      environment.accessToken = this.accessToken;
+
+      this.socketService.listen('testEvent').subscribe((data) => {
+        console.log(data);
+      });
+
+      this.socketService.emit('testEvent', { message: 'Hello from client!' });
+    }
+  }
+
   public loginWithSpotify() {
     window.location.href = this.authorizeUrl;
   }
@@ -94,21 +109,6 @@ export class HomePage implements OnInit {
     this.hasPlaylist = true;
     if (this.hasUser && this.hasPlaylist) {
       this.updateDisplay();
-    }
-  }
-
-  ngOnInit() {
-    const hashParams = new URLSearchParams(window.location.hash.substr(1));
-    if (hashParams.has('access_token')) {
-      this.accessToken = hashParams.get('access_token');
-      this.isDisconnected = false;
-      environment.accessToken = this.accessToken;
-
-      this.socketService.listen('testEvent').subscribe((data) => {
-        console.log(data);
-      });
-
-      this.socketService.emit('testEvent', { message: 'Hello from client!' });
     }
   }
 
