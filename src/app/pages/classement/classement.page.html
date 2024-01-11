@@ -1,16 +1,130 @@
+
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Classement</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item *ngFor="let member of members; let i = index">
-      <ion-label>{{ i + 1 }}. {{ member?.username }}</ion-label>
-      <ion-badge slot="end">{{ member?.score }}</ion-badge>
-    </ion-item>
-  </ion-list>
+<ion-content class="classement-general" scroll-y="false" [fullscreen]="true">
+    
+      @for (member of members; track member; let i = $index) {
+        @switch (i) {
+          @case (0) {
+            <ion-img class="crown" src="assets/crown/crown1.png"/> 
+            <ion-list class="list-classement-top1">
+            <ion-item lines="none" class="item-pp">
+              <ion-img class="imgclassementtop" slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+            <ion-item lines="none" class="item-text item-username">
+              <ion-label id="label-username">{{ member?.username }}</ion-label>            
+            </ion-item>
+            <ion-item lines="none" class="item-score">
+              <ion-badge class="item-score1"slot="end">Score : {{ member?.score }}</ion-badge>
+            </ion-item>
+          </ion-list>
+          }
+        }
+      } @empty { Empty list of users }
 
-  <ion-button (click)="backHome()">Retour à l'écran d'accueil</ion-button>
+      @for (member of members; track member; let i = $index) {
+        @switch (i) {
+          @case (1) {
+            <ion-img id="crown1" src="assets/crown/crown2.png"/>
+            }
+          } 
+        } @empty { Empty list of users }
+
+        @for (member of members; track member; let i = $index) {
+          @switch (i) {
+            @case (2) {
+              <ion-img id="crown2" src="assets/crown/crown3.png"/>
+              }
+            } 
+          } @empty { Empty list of users }
+      
+    <ion-list class="list-classement-top2">
+      @for (member of members; track member; let i = $index) {
+        @switch (i) {
+          @case (1) {
+            <ion-item lines="none" class="top2">
+                <ion-item lines="none" class="item-pp">
+                    <ion-img class="imgclassementtop" slot="start" [src]="member?.profilPicture"></ion-img> 
+                  </ion-item>
+                  <ion-item lines="none" class="item-text item-username">
+                    <ion-label id="label-username">{{ member?.username }}</ion-label>            
+                  </ion-item>
+                  <ion-item lines="none" class="item-score2">
+                    <ion-badge class="item-score1"slot="end">Score : {{ member?.score }}</ion-badge>
+                  </ion-item>
+            </ion-item>
+          }
+          @case (2) {
+            <ion-item lines="none" class="top3">
+              <ion-item lines="none" class="item-pp">
+                  <ion-img class="imgclassementtop" slot="start" [src]="member?.profilPicture"></ion-img> 
+                </ion-item>
+                <ion-item lines="none" class="item-text item-username">
+                  <ion-label id="label-username">{{ member?.username }}</ion-label>            
+                </ion-item>
+                <ion-item lines="none" class="item-score2">
+                  <ion-badge class="item-score1"slot="end">Score : {{ member?.score }}</ion-badge>
+                </ion-item>
+          </ion-item>
+          }
+
+        }
+      } @empty { Empty list of users }
+    </ion-list>
+
+    <ion-list lines="none" class="list-classement">
+      @for (member of members; track member; let i = $index) {
+        @switch (i) {
+          @case (3) {
+            <ion-item class="item-classement">
+              <ion-label class="top-nul">{{ i + 1 }}ème</ion-label>
+              <ion-label class="item-username3">{{ member?.username }}</ion-label>
+              <ion-badge slot="end">Score : {{ member?.score }}</ion-badge>
+              <ion-img class="imgclassement" slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+          @case (4) {
+            <ion-item lines="none"class="item-classement">
+              <ion-label class="top-nul">{{ i + 1 }}ème</ion-label>
+              <ion-label class="item-username3">{{ member?.username }}</ion-label>
+              <ion-badge slot="end">Score : {{ member?.score }}</ion-badge>
+              <ion-img class="imgclassement" slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+          @case (5) {
+            <ion-item lines="none" class="item-classement">
+              <ion-label class="top-nul">{{ i + 1 }}ème</ion-label>
+              <ion-label class="item-username3">{{ member?.username }}</ion-label>
+              <ion-badge slot="end">Score : {{ member?.score }}</ion-badge>
+              <ion-img class="imgclassement" slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+          @case (6) {
+            <ion-item lines="none" class="item-classement">
+              <ion-label class="top-nul">{{ i + 1 }}ème</ion-label>
+              <ion-label class="item-username3">{{ member?.username }}</ion-label>
+              <ion-badge slot="end">Score : {{ member?.score }}</ion-badge>
+              <ion-img class="imgclassement" slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+          @case (7) {
+            <ion-item lines="none" class="item-classement">
+              <ion-label class="top-nul">{{ i + 1 }}ème</ion-label>
+              <ion-label class="item-username3">{{ member?.username }}</ion-label>
+              <ion-badge slot="end">Score : {{ member?.score }}</ion-badge>
+              <ion-img class="imgclassement" slot="start" [src]="member?.profilPicture"></ion-img> 
+            </ion-item>
+          }
+        }
+      } @empty { Empty list of users }
+    </ion-list>
+
+  <ion-button class="bouton-classement-accueil" (click)="backHome()">Retour à l'écran d'accueil</ion-button>
 </ion-content>
+
+
+<canvas id="confetti"></canvas>
