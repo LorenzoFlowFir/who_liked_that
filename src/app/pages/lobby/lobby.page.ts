@@ -136,6 +136,7 @@ export class LobbyPage implements OnInit {
       // Afficher le bouton "Lancer la partie"
       if (this.members.length > 2) {
         this.tailleJoueursErreur = false;
+        this.showStartGameButton = true;
       } else {
         this.tailleJoueursErreur = true;
       }
