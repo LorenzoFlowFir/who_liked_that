@@ -16,7 +16,6 @@ import { Playlist } from '../../models/playlist.model';
 import { UserInfoService } from '../user-info/user-info.service';
 import { RandomSongForTheGameComponent } from 'src/app/pages/lobby/random-song-for-the-game/random-song-for-the-game.component';
 import { ModalController } from '@ionic/angular/standalone';
-import { ModalContentComponent } from 'src/shared/modal-content/modal-content.component';
 import { SongDetailComponent } from 'src/app/pages/lobby/random-song-for-the-game/song-detail/song-detail.component';
 
 @Injectable({
@@ -257,21 +256,6 @@ export class LikedSongService {
       // Ajoutez le conteneur au div#liked-track
       likedTrackDiv?.appendChild(trackContainer);
     }
-
-    // const btnRefrshLike = document.createElement('ion-button');
-    // btnRefrshLike.classList.add('btn');
-    // btnRefrshLike.classList.add('btn-primary');
-    // btnRefrshLike.textContent = "Charger d'autres musiques";
-    // btnRefrshLike.id = 'reload-liked';
-    // btnRefrshLike.addEventListener('click', () =>
-    //   this.get10RandomTracksFromPlaylist(allTracks).then((playlist) => {
-    //     this.isLoading = true;
-    //     document.getElementById('btnslot')?.removeChild(btnRefrshLike);
-    //     this.displayLikedTrack(allTracks, playlist);
-    //   })
-    // );
-
-    // document.getElementById('btnslot')?.appendChild(btnRefrshLike);
     console.log(newPlaylist);
     this.isLoading = false;
     return newPlaylist;

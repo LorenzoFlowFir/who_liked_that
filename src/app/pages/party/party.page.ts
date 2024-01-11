@@ -73,7 +73,7 @@ export class PartyPage implements OnInit, OnDestroy {
 
   public timeLeft: number = 15; // Temps en secondes
 
-  public hiddenCover: string = '../../../assets/nullMusic.png';
+  public hiddenCover: string = '';
   public hidden: boolean = true;
 
   public votingStarted: boolean = false;

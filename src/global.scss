@@ -42,3 +42,10 @@
   --border-radius: 30px 30px 30px 30px;
   --background: #3d3d3ffa;
 }
+
+ion-loading.custom-loading {
+  --background: #000000;
+  --spinner-color: #1db954;
+
+  color: #1db954;
+}

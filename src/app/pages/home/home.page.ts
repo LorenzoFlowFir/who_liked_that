@@ -7,6 +7,7 @@ import {
   IonButton,
   IonIcon,
   IonLoading,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
@@ -18,6 +19,7 @@ import { SocketService } from '../../services/socket/socket.service';
 import { JoinPartyButtonComponent } from './join-party-button/join-party-button.component';
 import { CreatePartyButtonComponent } from './create-party-button/create-party-button.component';
 import { environment } from '../../../environments/environment';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -37,12 +39,14 @@ import { environment } from '../../../environments/environment';
     JoinPartyButtonComponent,
     IonLoading,
     CreatePartyButtonComponent,
+    IonSpinner,
   ],
 })
 export class HomePage implements OnInit {
   public CLIENT_ID = '72a2f504b28f416ead2d3cc6bc1e6aa8';
   public REDIRECT_URI = `http://localhost:8100/`;
   //public REDIRECT_URI = `com.flowfir.wholiked://callback`;
+  //public REDIRECT_URI = `http://51.38.113.168:9999/`;
   public SCOPES = [
     'user-library-read',
     'user-modify-playback-state',
@@ -64,9 +68,17 @@ export class HomePage implements OnInit {
   public user: User | undefined;
   public playlist: Playlist | undefined;
   public displayButton = true;
-  public waiter = true;
 
-  constructor(private socketService: SocketService) {}
+  public hasUser: boolean = false;
+  public hasPlaylist: boolean = false;
+
+  public showLoading: boolean = true;
+  public showHome: boolean = false;
+
+  constructor(
+    private socketService: SocketService,
+    private loadingController: LoadingController
+  ) {}
 
   public loginWithSpotify() {
     window.location.href = this.authorizeUrl;
@@ -74,10 +86,15 @@ export class HomePage implements OnInit {
 
   onUserChanged(newUser: User) {
     this.user = newUser;
+    this.hasUser = true;
   }
 
   onPlaylistChanged(newPlaylist: Playlist) {
     this.playlist = newPlaylist;
+    this.hasPlaylist = true;
+    if (this.hasUser && this.hasPlaylist) {
+      this.updateDisplay();
+    }
   }
 
   ngOnInit() {
@@ -85,7 +102,7 @@ export class HomePage implements OnInit {
     if (hashParams.has('access_token')) {
       this.accessToken = hashParams.get('access_token');
       this.isDisconnected = false;
-      environment.accesToken = this.accessToken;
+      environment.accessToken = this.accessToken;
 
       this.socketService.listen('testEvent').subscribe((data) => {
         console.log(data);
@@ -93,9 +110,13 @@ export class HomePage implements OnInit {
 
       this.socketService.emit('testEvent', { message: 'Hello from client!' });
     }
+  }
 
-    setTimeout(() => {
-      this.waiter = false;
-    }, 2500);
+  private updateDisplay() {
+    if (this.hasUser && this.hasPlaylist) {
+      this.showLoading = false;
+    }
+    this.showHome = this.hasUser && this.hasPlaylist;
+    console.log(this.showLoading, this.showHome);
   }
 }

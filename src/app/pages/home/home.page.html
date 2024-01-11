@@ -1,18 +1,11 @@
-<ion-content [fullscreen]="true">
+<ion-content
+  [fullscreen]="true"
+  [style.display]="showHome ? 'block' : 'none'"
+  id="home"
+>
   <div id="container">
     <div class="row">
       <div class="col-12 text-center mb-5" id="main">
-        <!-- Bouton de connexion -->
-        <ion-button
-          *ngIf="isDisconnected"
-          id="connect"
-          class="btn btn-primary"
-          color="primary"
-          (click)="loginWithSpotify()"
-        >
-          Se connecter avec Spotify
-        </ion-button>
-        <!-- <app-test *ngIf="!isDisconnected"></app-test> -->
         <app-user-info
           *ngIf="!isDisconnected"
           [accessToken]="accessToken"
@@ -28,6 +21,44 @@
           <app-create-party-button></app-create-party-button>
           <app-join-party-button></app-join-party-button>
         </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-content [fullscreen]="true" *ngIf="isDisconnected" id="connexion">
+  <div id="merde">
+    <div class="row">
+      <div class="col-12 text-center mb-5" id="main">
+        <!-- Bouton de connexion -->
+        <ion-button
+          id="connect"
+          class="btn btn-primary"
+          color="primary"
+          (click)="loginWithSpotify()"
+        >
+          Se connecter avec Spotify
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-content
+  [fullscreen]="true"
+  *ngIf="!isDisconnected && showLoading && !showHome"
+  [style.display]="showLoading ? 'block' : 'none'"
+  id="loading"
+>
+  <div id="merde">
+    <div class="row">
+      <div class="col-12 text-center mb-5" id="main">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/2048px-Spotify_logo_without_text.svg.png"
+          alt="Spotify Logo"
+          width="100px"
+        />
+        <br />
+        <ion-spinner></ion-spinner>
       </div>
     </div>
   </div>

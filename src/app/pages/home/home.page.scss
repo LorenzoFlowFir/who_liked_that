@@ -1,4 +1,4 @@
-#container {
+#merde {
   text-align: center;
 
   position: absolute;
@@ -6,6 +6,11 @@
   right: 0;
   top: 50%;
   transform: translateY(-50%);
+}
+
+#container {
+  text-align: center;
+  transform: translateY(6.5%);
 }
 
 #container strong {
@@ -24,4 +29,11 @@
 
 #container a {
   text-decoration: none;
+}
+
+@media screen and (min-width: 768px) {
+  #container {
+    width: 25%;
+    margin: 0 auto;
+  }
 }

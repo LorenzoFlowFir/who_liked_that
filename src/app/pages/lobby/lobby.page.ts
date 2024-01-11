@@ -92,6 +92,10 @@ export class LobbyPage implements OnInit {
         console.log('Joined Party:', members);
 
         this.members = members;
+
+        if (!this.showStartGameButton) {
+          this.showStartGameButton = true;
+        }
       });
 
     this.updatedPartySubscription = this.socketService
