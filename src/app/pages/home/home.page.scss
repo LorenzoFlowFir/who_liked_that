@@ -10,7 +10,7 @@
 
 #container {
   text-align: center;
-  transform: translateY(6.5%);
+  transform: translateY(2%);
 }
 
 #container strong {
@@ -29,6 +29,14 @@
 
 #container a {
   text-decoration: none;
+}
+
+ion-spinner {
+  margin-top: 5em;
+}
+
+ion-header * {
+  text-align: center;
 }
 
 @media screen and (min-width: 768px) {
