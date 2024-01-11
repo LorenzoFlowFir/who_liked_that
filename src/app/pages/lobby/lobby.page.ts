@@ -61,6 +61,7 @@ import { Playlist } from 'src/app/models/playlist.model';
   ],
 })
 export class LobbyPage implements OnInit {
+  public accessToken: string | null = null;
   public partyId: string | null = null;
   public members: any[] = [];
   public joinedPartySubscription: any;
@@ -87,6 +88,10 @@ export class LobbyPage implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.partyId = params['id'];
       this.isHost = params['isHost'];
+
+      const fragm = new URLSearchParams(params);
+      this.accessToken = fragm.get('accessToken');
+
       // Vous pouvez maintenant utiliser this.partyId pour d'autres opérations
       // Après avoir rejoint la partie :
       if (environment.firstTime) {
@@ -95,14 +100,10 @@ export class LobbyPage implements OnInit {
       }
     });
 
-    //console.log(this.userInfoService.getCurrentUser());
-
     // Écouter les événements de 'joined-party' depuis le serveur
     this.joinedPartySubscription = this.socketService
       .listen('joined-party-members')
       .subscribe((members) => {
-        console.log('Joined Party:', members);
-
         this.members = members;
         this.updatePlayerSlots(members);
 
@@ -120,7 +121,11 @@ export class LobbyPage implements OnInit {
 
     this.socketService.listen('party-launched').subscribe(() => {
       this.router.navigate(['/party'], {
-        queryParams: { id: this.partyId, isHost: this.isHost },
+        fragment: `accessToken=${this.accessToken}`,
+        queryParams: {
+          id: this.partyId,
+          isHost: this.isHost,
+        },
       });
     });
 
@@ -128,13 +133,15 @@ export class LobbyPage implements OnInit {
     this.socketService.listen('all-players-ready').subscribe((playlists) => {
       // Stocker la grande playlist consolidée
       this.grandePlaylist = playlists;
+      this.showStartGameButton = false;
       // Afficher le bouton "Lancer la partie"
-      if (this.members.length > 2) {
-        this.tailleJoueursErreur = false;
-        this.showStartGameButton = false;
-      } else {
-        this.tailleJoueursErreur = true;
-      }
+      //!POUR JOUER QU'A PARTIR DE 3 JOUEURS
+      // if (this.members.length > 2) {
+      //   this.tailleJoueursErreur = false;
+      //
+      // } else {
+      //   this.tailleJoueursErreur = true;
+      // }
     });
   }
 
@@ -154,6 +161,7 @@ export class LobbyPage implements OnInit {
       component: RandomSongForTheGameComponent,
       cssClass: 'custom-modal',
       componentProps: {
+        accessToken: this.accessToken,
         partyId: this.partyId, // Passez "partyId" comme propriété au modal
       },
     });
@@ -174,7 +182,13 @@ export class LobbyPage implements OnInit {
   public launchParty() {
     if (this.partyId) {
       this.socketService.emit('launch-party', this.partyId);
-      this.router.navigate(['/party']); // Naviguer vers la nouvelle page party
+      this.router.navigate(['/party'], {
+        fragment: `accessToken=${this.accessToken}`,
+        queryParams: {
+          id: this.partyId,
+          isHost: this.isHost,
+        },
+      });
     }
   }
 
@@ -190,7 +204,9 @@ export class LobbyPage implements OnInit {
   leaveParty() {
     if (this.partyId) {
       this.socketService.emit('leave-party', this.partyId);
-      this.router.navigate(['/home']); // Naviguez vers la page d'accueil
+      this.router.navigate(['/home'], {
+        fragment: `accessToken=${this.accessToken}`,
+      });
     }
   }
   getStatusColorClass(isReady: boolean): string {

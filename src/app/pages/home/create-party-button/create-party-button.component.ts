@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SocketService } from '../../../services/socket/socket.service';
 import { IonButton } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
   standalone: true,
 })
 export class CreatePartyButtonComponent {
+  @Input() public accessToken: string = '';
   constructor(private socketService: SocketService, private router: Router) {}
 
   createParty() {
@@ -20,7 +21,11 @@ export class CreatePartyButtonComponent {
       .listen('party-created-id')
       .subscribe((partyId: string) => {
         this.router.navigate(['/lobby'], {
-          queryParams: { id: partyId, isHost: true },
+          fragment: `accessToken=${this.accessToken}`,
+          queryParams: {
+            id: partyId,
+            isHost: true,
+          },
         });
       });
   }

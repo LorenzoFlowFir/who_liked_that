@@ -21,6 +21,7 @@ export class UserInfoService {
   public user: User | undefined;
   firestore: Firestore = inject(Firestore);
   private currentUser: User | undefined;
+  private randomAvatarNumber = Math.floor(Math.random() * 8);
 
   constructor(private socketService: SocketService) {}
 
@@ -46,7 +47,7 @@ export class UserInfoService {
     try {
       const imageUrl =
         userProfile.images[1]?.url ||
-        'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624';
+        `../../../assets/profil_picture/avatar_${this.randomAvatarNumber}.png`;
 
       const user: User = {
         id: userProfile.id,
@@ -84,10 +85,8 @@ export class UserInfoService {
       const docRef = doc(this.firestore, 'Joueur', idUtilisateur);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        //console.log('Document data:', docSnap.data());
         return true;
       } else {
-        //console.log("Ce joueur n'existe pas!");
         return false;
       }
     } catch (error) {
@@ -105,13 +104,13 @@ export class UserInfoService {
       // Utilisez setDoc pour créer le document avec les données de l'utilisateur
       await setDoc(docRef, user);
 
-      console.log('Document written with ID: ', user.id);
+      console.info('Document written with ID: ', user.id);
 
       this.socketService.registerUser(
         this.user?.nom ?? 'Un utilisateur',
         this.user?.id ?? '0',
         this.user?.photo_profil ??
-          'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624'
+          `../../../assets/profil_picture/avatar_${this.randomAvatarNumber}.png`
       );
       return true;
     } catch (error) {
@@ -126,17 +125,17 @@ export class UserInfoService {
       const docRef = doc(this.firestore, 'Joueur', idUtilisateur);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        console.log('Document data (from db):', docSnap.data());
+        console.info('Document data (from db):', docSnap.data());
         this.socketService.registerUser(
           this.user?.nom ?? 'Un utilisateur',
           this.user?.id ?? '0',
           this.user?.photo_profil ??
-            'https://media.discordapp.net/attachments/1157341620002365502/1182308492737007648/avatar_rihanna.png?ex=658d7416&is=657aff16&hm=3ca6d9918fe7e1044a8242fa6af03ac6e5701cad633a00507489a486ca317b30&=&format=webp&quality=lossless&width=624&height=624'
+            `../../../assets/profil_picture/avatar_${this.randomAvatarNumber}.png`
         );
 
         return docSnap.data() as User;
       } else {
-        console.log('No such document!');
+        console.error('No such document!');
         return false;
       }
     } catch (error) {
@@ -165,11 +164,10 @@ export class UserInfoService {
           { ...userData, nb_parties: (userData.nb_parties || 0) + 1 },
           { merge: true }
         );
-        console.log(
-          `Nombre de parties mis à jour pour l'utilisateur ${idUtilisateur}`
-        );
       } else {
-        console.log(`Utilisateur ${idUtilisateur} introuvable dans Firestore`);
+        console.error(
+          `Utilisateur ${idUtilisateur} introuvable dans Firestore`
+        );
       }
     } catch (error) {
       console.error(
@@ -191,11 +189,10 @@ export class UserInfoService {
           { ...userData, nb_victoires: (userData.nb_victoires || 0) + 1 },
           { merge: true }
         );
-        console.log(
-          `Nombre de parties mis à jour pour l'utilisateur ${idUtilisateur}`
-        );
       } else {
-        console.log(`Utilisateur ${idUtilisateur} introuvable dans Firestore`);
+        console.error(
+          `Utilisateur ${idUtilisateur} introuvable dans Firestore`
+        );
       }
     } catch (error) {
       console.error(

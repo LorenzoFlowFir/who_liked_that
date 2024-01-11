@@ -77,7 +77,8 @@ export class RandLikedSongComponent implements OnInit {
         );
         if (!(playlist instanceof Error)) {
           await this.randomLikeService.AddPlaylistInDB(playlist);
-          console.log('envoyé à la bdd');
+          this.playlist = playlist;
+          this.playlistChanged.emit(this.playlist);
         } else {
           this.handleError(playlist);
         }

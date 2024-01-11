@@ -1,15 +1,9 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>party</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
-    <ion-toolbar >
+    <ion-toolbar>
       <div id="titre-party">
-      <ion-title size="large">Manche : {{currentManche}}/10</ion-title>
-      <h2 class="text-right"> {{ playerScores }} Points </h2>
+        <ion-title size="large">Manche : {{currentManche}}/10</ion-title>
+        <h2 class="text-right">{{ playerScores }} Points</h2>
       </div>
     </ion-toolbar>
   </ion-header>
@@ -18,17 +12,20 @@
     <ion-card-content *ngIf="!guessingTimeOver"
       >Temps restant : {{ timeLeft }} secondes
     </ion-card-content>
-    <ion-img
-      *ngIf="hidden"
-      [src]="targetTrack?.cover"
-      class="musicCover"
-      id="hiddenCover"
-    ></ion-img>
-    <ion-img
-      *ngIf="!hidden"
-      [src]="targetTrack?.cover"
-      class="musicCover"
-    ></ion-img>
+    <!-- Conteneur pour l'image avec flou -->
+    <div class="image-container">
+      <ion-img
+        *ngIf="hidden"
+        [src]="targetTrack?.cover"
+        class="musicCover"
+        id="hiddenCover"
+      ></ion-img>
+      <ion-img
+        *ngIf="!hidden"
+        [src]="targetTrack?.cover"
+        class="musicCover"
+      ></ion-img>
+    </div>
 
     @if (isHost && hidden ) {
     <ion-card-content *ngIf="isHost" class="detailSong">
@@ -39,19 +36,28 @@
     </ion-card-content>
     }@else if (isHost && !hidden) {
     <ion-card-content *ngIf="!hidden" class="detailSong">
-      <ion-text class="break-word">{{targetTrack?.name}} - {{targetTrack?.artist}}</ion-text>
+      <ion-text class="break-word"
+        >{{targetTrack?.name}} - {{targetTrack?.artist}}</ion-text
+      >
       <ion-button (click)="toggleHidden()" class="round-button">
         <ion-icon [name]="hidden ? 'eye-sharp' : 'eye-off-sharp'"></ion-icon>
       </ion-button>
     </ion-card-content>
     }@else if (!hidden) {
     <ion-card-content *ngIf="!hidden">
-      <ion-text class="break-word">{{targetTrack?.name}} - {{targetTrack?.artist}}</ion-text>
+      <ion-text class="break-word"
+        >{{targetTrack?.name}} - {{targetTrack?.artist}}</ion-text
+      >
     </ion-card-content>
     }
   </ion-card>
   <!-- Ajoutez un bouton pour démarrer le vote -->
-  <ion-button id="bouton-vote" expand="block" *ngIf="isHost && !votingStarted" (click)="triggerVoting()">
+  <ion-button
+    id="bouton-vote"
+    expand="block"
+    *ngIf="isHost && !votingStarted"
+    (click)="triggerVoting()"
+  >
     <b>VOTEZ !</b>
   </ion-button>
 
@@ -62,8 +68,8 @@
         *ngIf="member.username !== myUsername"
         class="bouton-membre"
         [color]="getColor(member)"
-          (click)="guessPlayer(member)"
-        >
+        (click)="guessPlayer(member)"
+      >
         {{ member?.username }}
       </ion-button>
     </ng-container>

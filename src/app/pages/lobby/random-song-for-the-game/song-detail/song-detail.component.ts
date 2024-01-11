@@ -9,12 +9,8 @@ import { Track } from 'src/app/models/track.model';
   standalone: true,
   imports: [IonContent],
 })
-export class SongDetailComponent implements OnInit {
+export class SongDetailComponent {
   @Input() track: Track | undefined;
 
   constructor() {}
-
-  ngOnInit() {
-    console.log('SongDetailComponent');
-  }
 }

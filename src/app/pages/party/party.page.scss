@@ -1,7 +1,3 @@
-.musicCover {
-  border-radius: 20px;
-}
-
 .round-button {
   --border-radius: 50%;
   width: 50px;
@@ -13,9 +9,21 @@
     margin: 0;
   }
 }
+.image-container {
+  overflow: hidden; /* Empêche les effets de déborder */
+  border-radius: 20px; /* Assurez-vous que cela correspond au border-radius de l'image */
+}
+
+.musicCover {
+  border-radius: 20px;
+}
 
 #hiddenCover {
-  filter: blur(1rem);
+  filter: blur(3rem);
+}
+
+ion-content {
+  margin-top: 5%;
 }
 
 .detailSong {
@@ -42,11 +50,11 @@
 }
 
 .text-right {
-  text-align:right;
+  text-align: right;
   margin-right: 4%;
 }
 
-#bouton-vote { 
+#bouton-vote {
   margin: 0 30%;
 }
 

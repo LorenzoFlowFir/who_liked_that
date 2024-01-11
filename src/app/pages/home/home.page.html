@@ -24,8 +24,12 @@
           (playlistChanged)="onPlaylistChanged($event)"
         ></app-rand-liked-song>
         <div *ngIf="!isDisconnected && displayButton">
-          <app-create-party-button></app-create-party-button>
-          <app-join-party-button></app-join-party-button>
+          <app-create-party-button
+            [accessToken]="accessToken"
+          ></app-create-party-button>
+          <app-join-party-button
+            [accessToken]="accessToken"
+          ></app-join-party-button>
         </div>
       </div>
     </div>

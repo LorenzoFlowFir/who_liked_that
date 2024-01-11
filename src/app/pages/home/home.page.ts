@@ -86,12 +86,6 @@ export class HomePage implements OnInit {
       this.accessToken = hashParams.get('access_token');
       this.isDisconnected = false;
       environment.accessToken = this.accessToken;
-
-      this.socketService.listen('testEvent').subscribe((data) => {
-        console.log(data);
-      });
-
-      this.socketService.emit('testEvent', { message: 'Hello from client!' });
     }
   }
 
@@ -117,6 +111,5 @@ export class HomePage implements OnInit {
       this.showLoading = false;
     }
     this.showHome = this.hasUser && this.hasPlaylist;
-    console.log(this.showLoading, this.showHome);
   }
 }

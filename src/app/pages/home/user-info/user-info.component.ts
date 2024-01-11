@@ -41,7 +41,7 @@ export class UserInfoComponent implements OnInit {
                 this.userInfoService.setCurrentUser(this.user);
               } else {
                 // Traiter le cas où l'utilisateur n'est pas trouvé
-                console.log('Utilisateur non trouvé dans la base de données');
+                console.error('Utilisateur non trouvé dans la base de données');
               }
             });
           } else {

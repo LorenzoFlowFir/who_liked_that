@@ -108,7 +108,7 @@ export class ClassementPage implements OnInit {
   //     score: 25,
   //   },
   // ];
-
+  public accessToken: string | null = null;
   public partyId: string | null = null;
   public isHost: boolean = false;
 
@@ -123,6 +123,8 @@ export class ClassementPage implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.partyId = params['id'];
       this.isHost = params['isHost'];
+      const fragm = new URLSearchParams(params);
+      this.accessToken = fragm.get('accessToken');
       this.socketService.emit('end-game', this.partyId);
     });
 
@@ -130,8 +132,6 @@ export class ClassementPage implements OnInit {
       this.members = data;
 
       this.members.forEach((member) => {
-        console.log(member.idSpotify);
-
         this.userInfoService.incrementUserGames(member.idSpotify);
       });
 
@@ -251,7 +251,9 @@ export class ClassementPage implements OnInit {
   public backHome() {
     if (this.partyId) {
       this.socketService.emit('leave-party', this.partyId);
-      this.router.navigate(['/home']); // Naviguez vers la page d'accueil
+      this.router.navigate(['/home'], {
+        fragment: `accessToken=${this.accessToken}`,
+      });
     }
   }
 }

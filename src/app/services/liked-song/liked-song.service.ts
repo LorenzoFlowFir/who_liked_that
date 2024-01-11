@@ -57,8 +57,6 @@ export class LikedSongService {
       if (!response.ok) {
         throw new Error(`Could not add track to queue: ${response.statusText}`);
       }
-
-      console.log(`Track ${trackId} added to queue`);
     } catch (error) {
       console.error('Error adding track to queue:', error);
     }
@@ -76,7 +74,6 @@ export class LikedSongService {
         limit: 50,
         offset,
       });
-      console.log(data);
 
       const tracks = data.items.map((item) => ({
         id: item.track.id,
@@ -91,7 +88,6 @@ export class LikedSongService {
       offset += 50;
     }
     this.loader = false;
-    console.log(`Nombre de titres aimés : ${total}`);
     return allTracks;
   }
 
@@ -105,10 +101,8 @@ export class LikedSongService {
       );
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        //console.log('Document data:', docSnap.data());
         return true;
       } else {
-        //console.log("Ce joueur n'existe pas!");
         return false;
       }
     } catch (error) {
@@ -145,7 +139,6 @@ export class LikedSongService {
       // Utilisez setDoc pour créer le document avec les données de l'utilisateur
       await setDoc(docRef, playlist);
 
-      console.log('Document written with ID: ', `playlist_${playlist.user_id}`);
       return true;
     } catch (error) {
       console.error("Erreur lors de la création de l'utilisateur :", error);
@@ -165,10 +158,8 @@ export class LikedSongService {
       );
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        console.log('Document data (from db):', docSnap.data());
         return docSnap.data() as Playlist;
       } else {
-        console.log('No such document!');
         return false;
       }
     } catch (error) {
@@ -256,7 +247,6 @@ export class LikedSongService {
       // Ajoutez le conteneur au div#liked-track
       likedTrackDiv?.appendChild(trackContainer);
     }
-    console.log(newPlaylist);
     this.isLoading = false;
     return newPlaylist;
   }

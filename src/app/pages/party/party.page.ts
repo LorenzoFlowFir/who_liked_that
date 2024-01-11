@@ -53,6 +53,7 @@ import {
   ],
 })
 export class PartyPage implements OnInit, OnDestroy {
+  public accessToken: string | null = null;
   public partyId: string | null = null;
   public isHost: boolean = false;
 
@@ -156,7 +157,6 @@ export class PartyPage implements OnInit, OnDestroy {
               });
           }
         } else if (this.isHost === false) {
-          console.log("Vous n'êtes pas l'hôte de la partie");
           this.sendTargetTrackSub = this.socketService
             .listen('send-target-track')
             .subscribe((data) => {
@@ -191,6 +191,8 @@ export class PartyPage implements OnInit, OnDestroy {
           if (params['id']) {
             this.partyId = params['id'];
             this.isHost = params['isHost'] ?? false;
+            const fragm = new URLSearchParams(params);
+            this.accessToken = fragm.get('accessToken');
             resolve();
           }
         }
@@ -225,12 +227,6 @@ export class PartyPage implements OnInit, OnDestroy {
           this.targetTrack = this.mancheService.getRandomTrack(
             this.targetPlaylist
           );
-          console.log(
-            'Manche ' +
-              this.currentManche +
-              ': Lecture de ' +
-              this.targetTrack.name
-          );
 
           //Supprime la musique cible de la playlist du joueur cible
           this.playlists.find(
@@ -250,10 +246,6 @@ export class PartyPage implements OnInit, OnDestroy {
           });
         }
       }
-    } else {
-      // Si toutes les manches sont terminées
-      console.log('Fin de la partie !');
-      // Ici, vous pouvez gérer la fin de la partie (afficher les scores, naviguer vers un écran de fin, etc.)
     }
   }
 
@@ -341,9 +333,6 @@ export class PartyPage implements OnInit, OnDestroy {
         if (!this.playerGuesses[this.targetPlayer.id]) {
           this.playerGuesses[this.targetPlayer.id] = 'success';
         }
-
-        console.log(this.targetPlayer.username);
-
         // Envoyer la réponse au serveur
         if (
           this.memberGuesses &&
@@ -366,17 +355,18 @@ export class PartyPage implements OnInit, OnDestroy {
               this.playerScores = myScore;
             }
           });
-        console.log('Fin du temps de supposition');
-        console.log(this.members);
 
         setTimeout(() => {
           this.currentManche++; // Incrémenter le numéro de la manche actuelle
           if (this.currentManche <= this.totalManches) {
             this.startManche(); // Commence la manche suivante
           } else {
-            console.log('Fin de la partie !');
             this.router.navigate(['/classement'], {
-              queryParams: { id: this.partyId, isHost: this.isHost },
+              fragment: `accessToken=${this.accessToken}`,
+              queryParams: {
+                id: this.partyId,
+                isHost: this.isHost,
+              },
             });
             // Ajouter ici la logique de fin de partie
           }
