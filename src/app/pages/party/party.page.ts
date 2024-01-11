@@ -13,6 +13,7 @@ import {
   IonCardContent,
   IonButton,
   IonIcon,
+  IonText,
 } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocketService } from '../../services/socket/socket.service';
@@ -48,6 +49,7 @@ import {
     IonCardContent,
     IonButton,
     IonIcon,
+    IonText,
   ],
 })
 export class PartyPage implements OnInit, OnDestroy {

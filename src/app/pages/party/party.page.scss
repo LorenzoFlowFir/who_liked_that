@@ -24,9 +24,46 @@
   justify-content: space-between;
 }
 
+.break-word {
+  max-width: 90%;
+  word-wrap: break-word;
+}
+
 @media screen and (min-width: 768px) {
   ion-content {
     width: 25%;
     margin: 0 auto;
   }
+}
+
+#blur {
+  color: transparent;
+  text-shadow: 0 0 20px #000;
+}
+
+.text-right {
+  text-align:right;
+  margin-right: 4%;
+}
+
+#bouton-vote { 
+  margin: 0 30%;
+}
+
+.conteneur-membre {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.bouton-membre {
+  width: 32%;
+  margin: 5px auto;
+}
+
+#titre-party {
+  background-color: #1e2023;
+  border-radius: 10px;
+  margin: 0 4%;
+  padding: 1% 0;
 }
