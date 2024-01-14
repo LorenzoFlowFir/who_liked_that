@@ -214,6 +214,7 @@ export class PartyPage implements OnInit, OnDestroy {
       this.playerGuesses = {}; // Réinitialiser les suppositions des joueurs
       this.memberGuesses = undefined; // Réinitialiser les suppositions des joueurs
       this.targetPlayer = undefined;
+      this.isTarget = null;
 
       // Si c'est l'hôte, choisissez un nouveau joueur cible et une nouvelle piste
       if (this.isHost && this.partyId) {
