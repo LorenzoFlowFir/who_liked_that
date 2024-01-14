@@ -3,11 +3,13 @@
   width: 50px;
   height: 50px;
   position: absolute;
-  right: 0;
 
   ion-icon {
     margin: 0;
   }
+}
+.right {
+  right: 0;
 }
 .image-container {
   overflow: hidden; /* Empêche les effets de déborder */
@@ -52,6 +54,11 @@ ion-content {
 .text-right {
   text-align: right;
   margin-right: 4%;
+}
+
+.text-left {
+  text-align: left;
+  margin-left: 4%;
 }
 
 #bouton-vote {

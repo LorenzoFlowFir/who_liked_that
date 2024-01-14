@@ -30,6 +30,7 @@ import {
   playSharp,
   pauseSharp,
   playSkipForwardSharp,
+  personSharp,
 } from 'ionicons/icons';
 
 @Component({
@@ -88,6 +89,7 @@ export class PartyPage implements OnInit, OnDestroy {
   public myUsername: string = this.userInfoService.user!.nom;
   public playerScores: number = 0;
   private memberGuesses: any;
+  public isTarget: boolean | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -102,6 +104,7 @@ export class PartyPage implements OnInit, OnDestroy {
       playSharp,
       pauseSharp,
       playSkipForwardSharp,
+      personSharp,
     });
   }
 
@@ -372,6 +375,18 @@ export class PartyPage implements OnInit, OnDestroy {
           }
         }, 5000); // 5 secondes
       }, 15000); // 15 secondes
+    }
+  }
+
+  public isTargetPlayer(): void {
+    console.log(this.isTarget);
+    console.log(this.myUsername);
+    console.log(this.targetPlayer?.username);
+
+    if (this.isTarget === null) {
+      this.isTarget = this.myUsername === this.targetPlayer?.username;
+    } else if (this.isTarget === true || this.isTarget === false) {
+      this.isTarget = null;
     }
   }
 

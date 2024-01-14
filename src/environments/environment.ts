@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   firstTime: true,
   accessToken: '',
+  REDIRECT_URI: 'http://localhost:8100/',
 };
 
 /*
