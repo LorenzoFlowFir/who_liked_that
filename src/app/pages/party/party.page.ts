@@ -380,10 +380,6 @@ export class PartyPage implements OnInit, OnDestroy {
   }
 
   public isTargetPlayer(): void {
-    console.log(this.isTarget);
-    console.log(this.myUsername);
-    console.log(this.targetPlayer?.username);
-
     if (this.isTarget === null) {
       this.isTarget = this.myUsername === this.targetPlayer?.username;
     } else if (this.isTarget === true || this.isTarget === false) {
