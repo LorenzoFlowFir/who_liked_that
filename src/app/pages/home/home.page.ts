@@ -44,10 +44,9 @@ import { LoadingController } from '@ionic/angular';
 })
 export class HomePage implements OnInit {
   public CLIENT_ID = '72a2f504b28f416ead2d3cc6bc1e6aa8';
-  public REDIRECT_URI = environment.REDIRECT_URI;
   //public REDIRECT_URI = `http://localhost:8100/`;
   //public REDIRECT_URI = `com.flowfir.wholiked://callback`;
-  //public REDIRECT_URI = `http://wholikedthat.lol/`;
+  public REDIRECT_URI = `http://wholikedthat.lol/`;
   public SCOPES = [
     'user-library-read',
     'user-modify-playback-state',

@@ -25,7 +25,7 @@
       <ion-item *ngIf="!slot" class="itemForPlayers" color="light" lines="none">
         <ion-thumbnail slot="start">
           <ion-img
-            src="../../../assets/nullProfilePicture.png"
+            src="../../../assets/nullMusic.png"
             style="border-radius: 10px"
           ></ion-img>
         </ion-thumbnail>
@@ -34,7 +34,7 @@
     </ion-card-content>
     @if (tailleJoueursErreur) {
     <ion-text color="danger" *ngIf="tailleJoueursErreur" id="error">
-      <p>Il faut au minimum 3 joueurs</p>
+      <p>Il faut au minimum 2 joueurs</p>
     </ion-text>
     }
   </ion-card>
