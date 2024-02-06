@@ -28,4 +28,8 @@ export const routes: Routes = [
         (m) => m.ClassementPage
       ),
   },
+  {
+    path: 'set-profile-picture',
+    loadComponent: () => import('./pages/home/set-profile-picture/set-profile-picture.page').then( m => m.SetProfilePicturePage)
+  },
 ];
