@@ -53,4 +53,9 @@ export class UserInfoComponent implements OnInit {
         }
       });
   }
+
+  //Ouverture du modal de modifications de la photo de profil
+  public showPictureSetModal() {
+    console.log('Image cliquée !');
+  }
 }
