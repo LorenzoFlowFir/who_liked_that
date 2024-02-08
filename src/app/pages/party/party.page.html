@@ -3,6 +3,37 @@
     <ion-toolbar>
       <div id="titre-party">
         <ion-title size="large">Manche : {{currentManche}}/10</ion-title>
+
+        <!-- Condition pour afficher le bouton d'indicateur d'imposteur -->
+        @if (isTarget == true) {
+        <ion-button
+          class="round-button text-left"
+          color="primary"
+          id="bouton-is-target-player"
+          (click)="isTargetPlayer()"
+        >
+          <ion-icon name="person-sharp"></ion-icon>
+        </ion-button>
+        }@else if (isTarget == false) {
+        <ion-button
+          class="round-button text-left"
+          color="danger"
+          id="bouton-is-target-player"
+          (click)="isTargetPlayer()"
+        >
+          <ion-icon name="person-sharp"></ion-icon>
+        </ion-button>
+        }@else if (isTarget == null) {
+        <ion-button
+          class="round-button text-left"
+          color="tertiary"
+          id="bouton-is-target-player"
+          (click)="isTargetPlayer()"
+        >
+          <ion-icon name="eye-sharp"></ion-icon>
+        </ion-button>
+        }
+
         <h2 class="text-right">{{ playerScores }} Points</h2>
       </div>
     </ion-toolbar>
@@ -30,7 +61,7 @@
     @if (isHost && hidden ) {
     <ion-card-content *ngIf="isHost" class="detailSong">
       <ion-text id="blur">Texte flou</ion-text>
-      <ion-button (click)="toggleHidden()" class="round-button">
+      <ion-button (click)="toggleHidden()" class="round-button right">
         <ion-icon [name]="hidden ? 'eye-sharp' : 'eye-off-sharp'"></ion-icon>
       </ion-button>
     </ion-card-content>
@@ -39,7 +70,7 @@
       <ion-text class="break-word"
         >{{targetTrack?.name}} - {{targetTrack?.artist}}</ion-text
       >
-      <ion-button (click)="toggleHidden()" class="round-button">
+      <ion-button (click)="toggleHidden()" class="round-button right">
         <ion-icon [name]="hidden ? 'eye-sharp' : 'eye-off-sharp'"></ion-icon>
       </ion-button>
     </ion-card-content>
