@@ -22,6 +22,7 @@ export class SetProfilePicturePage implements OnInit {
 
   constructor(
     private modalController: ModalController,
+    private alertController: AlertController,
   ) {}
 
   ngOnInit() {
@@ -56,7 +57,8 @@ export class SetProfilePicturePage implements OnInit {
     return this.selectedImage === image;
   }
 
-  onFileSelected(event: any) {
+  // Cette fonction est appelée lorsqu'un fichier est sélectionné
+  async onFileSelected(event: any) {
     const fileInput = event.target;
 
     // Vérifiez s'il y a des fichiers sélectionnés
@@ -65,11 +67,37 @@ export class SetProfilePicturePage implements OnInit {
 
       // Utilisez FileReader pour lire le fichier en tant que Data URL
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.selectedImage = e.target.result;
+      reader.onload = async (e: any) => {
+        // Récupérez l'image d'origine en tant qu'élément d'image
+        const originalImage = new Image();
+        originalImage.onload = () => {
+          // Créez un canvas pour découper l'image en carré
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+
+          if (context) {
+            const maxSize = Math.min(originalImage.width, originalImage.height);
+            canvas.width = maxSize;
+            canvas.height = maxSize;
+
+            // Calculer les positions de découpe
+            const offsetX = (originalImage.width - maxSize) / 2;
+            const offsetY = (originalImage.height - maxSize) / 2;
+
+            // Dessinez l'image dans le canvas avec découpe
+            context.drawImage(originalImage, offsetX, offsetY, maxSize, maxSize, 0, 0, maxSize, maxSize);
+
+            // Obtenez le data URL du canvas découpé
+            this.selectedImage = canvas.toDataURL('image/png');
+          } else {
+            console.error('Le contexte du canvas est null.');
+          }
+        };
+        originalImage.src = e.target.result;
       };
       reader.readAsDataURL(selectedFile);
     }
   }
+
 
 }

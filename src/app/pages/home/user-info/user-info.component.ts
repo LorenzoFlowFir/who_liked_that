@@ -66,7 +66,6 @@ export class UserInfoComponent implements OnInit {
 
   //Ouverture du modal de modifications de la photo de profil
   public async showPictureSetModal() {
-    console.log('Image cliquée !');
     const modal = await this.modalController.create({
       component: SetProfilePicturePage,
       componentProps: {
