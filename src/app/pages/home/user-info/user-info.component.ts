@@ -70,8 +70,7 @@ export class UserInfoComponent implements OnInit {
     const modal = await this.modalController.create({
       component: SetProfilePicturePage,
       componentProps: {
-        // Vous pouvez passer des données au composant modal si nécessaire
-        // Exemple: key: 'value'
+        actual_profile_picture: this.user?.photo_profil,
       },
     });
 

@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { User } from '../../../models/user.model';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
 import { ModalController } from '@ionic/angular/standalone';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-set-profile-picture',
@@ -14,49 +15,29 @@ import { ModalController } from '@ionic/angular/standalone';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class SetProfilePicturePage implements OnInit {
-  @Input() public accessToken: any;
-  @Output() userChanged = new EventEmitter<User>();
+  @Input() actual_profile_picture: string= '';
+  selectedImage: string = '';
 
-  public user: User | undefined;
+  images: string[] = [];
 
   constructor(
-    public userInfoService: UserInfoService,
     private modalController: ModalController,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.images = [
+      '../../../assets/profil_picture/avatar_0.png',
+      '../../../assets/profil_picture/avatar_1.png',
+      '../../../assets/profil_picture/avatar_2.png',
+      '../../../assets/profil_picture/avatar_3.png',
+      '../../../assets/profil_picture/avatar_4.png',
+      '../../../assets/profil_picture/avatar_5.png',
+      '../../../assets/profil_picture/avatar_6.png',
+      '../../../assets/profil_picture/avatar_7.png',
+    ];
 
-  /*ngOnInit() {
-    this.userInfoService
-      .getInfoPersonnelUtilisateur(this.accessToken)
-      .then(async (userProfile) => {
-        const user = await this.userInfoService.CreateUser(userProfile);
-        if (user instanceof Error) {
-          console.error('Une erreur est survenue :', user);
-        } else {
-          const utilisateurExiste =
-            await this.userInfoService.VerifierUtilisateurExiste(user.id);
-          if (utilisateurExiste) {
-            // Attendre la résolution de la promesse
-            this.userInfoService.GetUserInfoFromDB(user.id).then((userInfo) => {
-              if (userInfo) {
-                this.user = userInfo;
-                this.userChanged.emit(this.user);
-                this.userInfoService.setCurrentUser(this.user);
-              } else {
-                // Traiter le cas où l'utilisateur n'est pas trouvé
-                console.error('Utilisateur non trouvé dans la base de données');
-              }
-            });
-          } else {
-            this.userInfoService.AddUserInDB(user);
-            this.user = user;
-            this.userChanged.emit(this.user);
-            this.userInfoService.setCurrentUser(this.user);
-          }
-        }
-      });
-  }*/
+    this.selectedImage = this.actual_profile_picture;
+  }
 
   validate() {
     console.log('validate');
@@ -66,5 +47,29 @@ export class SetProfilePicturePage implements OnInit {
     this.modalController.dismiss();
   }
 
+
+  selectImage(image: string) {
+    this.selectedImage = image;
+  }
+
+  isImageSelected(image: string): boolean {
+    return this.selectedImage === image;
+  }
+
+  onFileSelected(event: any) {
+    const fileInput = event.target;
+
+    // Vérifiez s'il y a des fichiers sélectionnés
+    if (fileInput.files && fileInput.files.length > 0) {
+      const selectedFile = fileInput.files[0];
+
+      // Utilisez FileReader pour lire le fichier en tant que Data URL
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.selectedImage = e.target.result;
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  }
 
 }
