@@ -8,6 +8,7 @@ import {
   IonIcon,
   IonLoading,
   IonSpinner,
+  IonButtons,
 } from '@ionic/angular/standalone';
 import SpotifyWebApi from 'spotify-web-api-js';
 import { CommonModule } from '@angular/common';
@@ -15,11 +16,13 @@ import { RandLikedSongComponent } from './rand-liked-song/rand-liked-song.compon
 import { UserInfoComponent } from './user-info/user-info.component';
 import { User } from '../../models/user.model';
 import { Playlist } from '../../models/playlist.model';
-import { SocketService } from '../../services/socket/socket.service';
 import { JoinPartyButtonComponent } from './join-party-button/join-party-button.component';
 import { CreatePartyButtonComponent } from './create-party-button/create-party-button.component';
 import { environment } from '../../../environments/environment';
-import { LoadingController } from '@ionic/angular';
+//Pour les icons
+import { addIcons } from 'ionicons';
+import { settingsOutline } from 'ionicons/icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +30,7 @@ import { LoadingController } from '@ionic/angular';
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [
+    IonButtons,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -43,10 +47,11 @@ import { LoadingController } from '@ionic/angular';
   ],
 })
 export class HomePage implements OnInit {
-  public CLIENT_ID = '72a2f504b28f416ead2d3cc6bc1e6aa8';
-  //public REDIRECT_URI = `http://localhost:8100/`;
+  //!public CLIENT_ID = '72a2f504b28f416ead2d3cc6bc1e6aa8';
+  public CLIENT_ID = 'd194dd4dc1834544ae23941f8c38e8f3';
+  public REDIRECT_URI = `http://localhost:8100/`;
   //public REDIRECT_URI = `com.flowfir.wholiked://callback`;
-  public REDIRECT_URI = `http://wholikedthat.lol/`;
+  //!public REDIRECT_URI = `http://wholikedthat.lol/`;
   public SCOPES = [
     'user-library-read',
     'user-modify-playback-state',
@@ -75,10 +80,11 @@ export class HomePage implements OnInit {
   public showLoading: boolean = true;
   public showHome: boolean = false;
 
-  constructor(
-    private socketService: SocketService,
-    private loadingController: LoadingController
-  ) {}
+  constructor(private router: Router) {
+    addIcons({
+      settingsOutline,
+    });
+  }
 
   ngOnInit() {
     const hashParams = new URLSearchParams(window.location.hash.substr(1));
@@ -111,5 +117,9 @@ export class HomePage implements OnInit {
       this.showLoading = false;
     }
     this.showHome = this.hasUser && this.hasPlaylist;
+  }
+  goToSettings() {
+    // Assurez-vous d'avoir importé le Router d'Angular
+    this.router.navigate(['/settings'], {});
   }
 }

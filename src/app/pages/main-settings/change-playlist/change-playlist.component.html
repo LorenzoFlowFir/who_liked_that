@@ -1,0 +1,46 @@
+<div class="change-playlist-container">
+  <h1><strong>Change Playlist</strong></h1>
+  <h4>Choisissez la playlist que vous allez utiliser en Jeu :</h4>
+  <div *ngIf="haveAccess; else noAccess">
+    <div *ngIf="loading">
+      <ion-spinner></ion-spinner>
+    </div>
+    <div *ngIf="!loading">
+      <ion-list>
+        <ion-item>
+          <ion-avatar slot="start">
+            <img
+              [src]="this.selectedPlaylist?.images[0].url"
+              alt="Playlist Image"
+            />
+          </ion-avatar>
+          <ion-label>{{ this.selectedPlaylist?.name }}</ion-label>
+          <ion-select
+            [(ngModel)]="selectedPlaylistId"
+            (ionChange)="handleChange($event)"
+          >
+            <ion-select-option
+              *ngFor="let playlist of playlists"
+              [value]="playlist"
+            >
+              {{ playlist.name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+      <ion-button
+        expand="block"
+        (click)="validatePlaylist()"
+        [disabled]="!selectedPlaylistId || validatingPlaylist"
+      >
+        <!-- Condition pour afficher le spinner ou le texte du bouton -->
+        <ion-spinner *ngIf="validatingPlaylist" name="lines"></ion-spinner>
+        <ng-container *ngIf="!validatingPlaylist">Change Playlist</ng-container>
+      </ion-button>
+      <p *ngIf="validatingPlaylist">Cela peut prendre un peu de temps</p>
+    </div>
+  </div>
+  <ng-template #noAccess>
+    <p>Please refresh the page.</p>
+  </ng-template>
+</div>
