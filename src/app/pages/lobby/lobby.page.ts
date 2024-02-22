@@ -33,9 +33,7 @@ import { RandomSongForTheGameComponent } from './random-song-for-the-game/random
 import { Playlist } from 'src/app/models/playlist.model';
 //Pour les icons
 import { addIcons } from 'ionicons';
-import {
-  settingsOutline
-} from 'ionicons/icons';
+import { settingsOutline } from 'ionicons/icons';
 import { PartySettingsComponent } from './party-settings/party-settings.component';
 
 @Component({
@@ -107,9 +105,9 @@ export class LobbyPage implements OnInit {
     await modal.present();
 
     const { data } = await modal.onWillDismiss();
-  if (data) {
-    this.numberOfRounds = data.numberOfRounds;
-  }
+    if (data && this.isHost) {
+      this.numberOfRounds = data.numberOfRounds;
+    }
   }
 
   async ngOnInit() {
@@ -208,7 +206,10 @@ export class LobbyPage implements OnInit {
 
   public launchParty() {
     if (this.partyId) {
-      this.socketService.emit('launch-party', {partyId : this.partyId, nbDeManches: this.numberOfRounds});
+      this.socketService.emit('launch-party', {
+        partyId: this.partyId,
+        nbDeManches: this.numberOfRounds,
+      });
       this.router.navigate(['/party'], {
         fragment: `accessToken=${this.accessToken}`,
         queryParams: {

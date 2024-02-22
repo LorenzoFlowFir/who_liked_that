@@ -81,7 +81,6 @@ export class PartyPage implements OnInit, OnDestroy {
 
   public votingStarted: boolean = false;
 
-  
   public currentManche: number = 1; // Suivi de la manche actuelle
   public totalManches: number = 0; // Total des manches
 
@@ -153,6 +152,7 @@ export class PartyPage implements OnInit, OnDestroy {
                     partyId: this.partyId,
                     track: this.targetTrack,
                     player: this.targetPlayer,
+                    nbDeManches: this.totalManches,
                   });
                 }
               });
@@ -161,9 +161,11 @@ export class PartyPage implements OnInit, OnDestroy {
           this.sendTargetTrackSub = this.socketService
             .listen('send-target-track')
             .subscribe((data) => {
+              console.log(data);
               this.targetTrack = data.track;
               this.targetPlayer = data.player;
               this.members = data.members;
+              this.totalManches = data.nbDeManches;
             });
         }
         this.subscriptionsInitialized = true;
