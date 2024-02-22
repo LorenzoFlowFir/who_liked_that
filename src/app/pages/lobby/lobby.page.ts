@@ -63,8 +63,6 @@ import { Playlist } from 'src/app/models/playlist.model';
 export class LobbyPage implements OnInit {
   public accessToken: string | null = null;
   public partyId: string | null = null;
-  //TODO
-  public nbDeManches: number = 13;
   public members: any[] = [];
   public joinedPartySubscription: any;
   public updatedPartySubscription: any;
@@ -136,7 +134,7 @@ export class LobbyPage implements OnInit {
       // Stocker la grande playlist consolidée
       this.grandePlaylist = playlists;
       // Afficher le bouton "Lancer la partie"
-      if (this.members.length > 0) {
+      if (this.members.length > 2) {
         this.tailleJoueursErreur = false;
         this.showStartGameButton = false;
       } else {
@@ -181,10 +179,7 @@ export class LobbyPage implements OnInit {
 
   public launchParty() {
     if (this.partyId) {
-      this.socketService.emit('launch-party', {
-        partyId: this.partyId,
-        nbDeManches: this.nbDeManches,
-      });
+      this.socketService.emit('launch-party', this.partyId);
       this.router.navigate(['/party'], {
         fragment: `accessToken=${this.accessToken}`,
         queryParams: {
@@ -194,6 +189,7 @@ export class LobbyPage implements OnInit {
       });
     }
   }
+
   ngOnDestroy() {
     if (this.joinedPartySubscription) {
       this.joinedPartySubscription.unsubscribe();

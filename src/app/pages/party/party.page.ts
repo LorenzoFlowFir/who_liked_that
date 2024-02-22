@@ -82,7 +82,7 @@ export class PartyPage implements OnInit, OnDestroy {
   public votingStarted: boolean = false;
 
   public currentManche: number = 1; // Suivi de la manche actuelle
-  public totalManches: number = 0;
+  public totalManches: number = 10; // Total des manches
 
   public myUserId: string = this.userInfoService.user!.id;
   public myUsername: string = this.userInfoService.user!.nom;
@@ -117,8 +117,8 @@ export class PartyPage implements OnInit, OnDestroy {
                 //Récupère les informations de la partie (Membres + Sons des Joueurs)
                 this.members = data.members;
                 this.playlists = data.playlists;
+
                 //Choisi le joueur cible
-                this.totalManches = data.nbDeManches;
                 this.targetPlayer = this.mancheService.getRandomPlayer(
                   this.members
                 );
@@ -167,7 +167,6 @@ export class PartyPage implements OnInit, OnDestroy {
         }
         this.subscriptionsInitialized = true;
       }
-
       this.startManche(); // Commence la première manche
     });
 
