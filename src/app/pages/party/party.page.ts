@@ -1,5 +1,5 @@
 // party.page.ts
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserInfoService } from 'src/app/services/user-info/user-info.service';
@@ -81,6 +81,7 @@ export class PartyPage implements OnInit, OnDestroy {
 
   public votingStarted: boolean = false;
 
+  
   public currentManche: number = 1; // Suivi de la manche actuelle
   public totalManches: number = 10; // Total des manches
 

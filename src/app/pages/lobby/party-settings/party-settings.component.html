@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Paramètres de la partie</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Nombre de manches</ion-label>
+    <ion-select [(ngModel)]="numberOfRounds" interface="popover" placeholder="Sélectionnez le nombre de manches">
+      <ion-select-option value="6">6</ion-select-option>
+      <ion-select-option value="8">8</ion-select-option>
+      <ion-select-option value="10">10</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-button expand="block" (click)="saveSettings()">Sauvegarder</ion-button>
+</ion-content>

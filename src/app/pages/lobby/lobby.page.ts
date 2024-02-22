@@ -22,6 +22,8 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonIcon,
+  IonButtons,
 } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocketService } from '../../services/socket/socket.service';
@@ -29,6 +31,12 @@ import { environment } from '../../../environments/environment';
 import { UserInfoService } from '../../services/user-info/user-info.service';
 import { RandomSongForTheGameComponent } from './random-song-for-the-game/random-song-for-the-game.component';
 import { Playlist } from 'src/app/models/playlist.model';
+//Pour les icons
+import { addIcons } from 'ionicons';
+import {
+  settingsOutline
+} from 'ionicons/icons';
+import { PartySettingsComponent } from './party-settings/party-settings.component';
 
 @Component({
   selector: 'app-lobby',
@@ -58,6 +66,8 @@ import { Playlist } from 'src/app/models/playlist.model';
     IonGrid,
     IonRow,
     IonCol,
+    IonIcon,
+    IonButtons,
   ],
 })
 export class LobbyPage implements OnInit {
@@ -71,6 +81,7 @@ export class LobbyPage implements OnInit {
   public showStartGameButton: boolean = true;
   public tailleJoueursErreur: boolean = false;
   public grandePlaylist: any;
+  public numberOfRounds: number = 10;
 
   public maxPlayers: number = 8;
   public playerSlots: any[] = new Array(this.maxPlayers).fill(null);
@@ -81,7 +92,25 @@ export class LobbyPage implements OnInit {
     private router: Router,
     private userInfoService: UserInfoService,
     private modalController: ModalController
-  ) {}
+  ) {
+    addIcons({
+      'settings-outline': settingsOutline,
+    });
+  }
+
+  //fct pour ouvrir le modal des settings
+  async openPartySettings() {
+    const modal = await this.modalController.create({
+      component: PartySettingsComponent,
+      cssClass: 'custom-modal',
+    });
+    await modal.present();
+
+    const { data } = await modal.onWillDismiss();
+  if (data) {
+    this.numberOfRounds = data.numberOfRounds;
+  }
+  }
 
   async ngOnInit() {
     // Souscrire aux queryParams pour récupérer l'ID de la partie
