@@ -83,7 +83,7 @@ export class PartyPage implements OnInit, OnDestroy {
 
   
   public currentManche: number = 1; // Suivi de la manche actuelle
-  public totalManches: number = 10; // Total des manches
+  public totalManches: number = 0; // Total des manches
 
   public myUserId: string = this.userInfoService.user!.id;
   public myUsername: string = this.userInfoService.user!.nom;
@@ -118,7 +118,7 @@ export class PartyPage implements OnInit, OnDestroy {
                 //Récupère les informations de la partie (Membres + Sons des Joueurs)
                 this.members = data.members;
                 this.playlists = data.playlists;
-
+                this.totalManches = data.nbDeManches;
                 //Choisi le joueur cible
                 this.targetPlayer = this.mancheService.getRandomPlayer(
                   this.members

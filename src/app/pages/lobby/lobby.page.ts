@@ -208,7 +208,7 @@ export class LobbyPage implements OnInit {
 
   public launchParty() {
     if (this.partyId) {
-      this.socketService.emit('launch-party', this.partyId);
+      this.socketService.emit('launch-party', {partyId : this.partyId, nbDeManches: this.numberOfRounds});
       this.router.navigate(['/party'], {
         fragment: `accessToken=${this.accessToken}`,
         queryParams: {
