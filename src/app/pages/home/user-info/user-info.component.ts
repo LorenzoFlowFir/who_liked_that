@@ -77,6 +77,9 @@ export class UserInfoComponent implements OnInit {
 
     // Attendre la fermeture du modal pour effectuer une action après sa fermeture (si nécessaire)
     const { data } = await modal.onDidDismiss();
-    console.log('Données renvoyées après la fermeture du modal:', data);
+    if (data && this.user && this.user.photo_profil !== data) {
+      // Mettez à jour la propriété user?.photo_profil avec la nouvelle photo
+      this.user.photo_profil = data;
+    }
   }
 }

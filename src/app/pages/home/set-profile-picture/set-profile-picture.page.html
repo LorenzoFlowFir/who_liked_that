@@ -14,7 +14,7 @@
   <ion-grid>
     <ion-row>
       <ion-col size="4">
-        <ion-img class="grid_profile_picture" [class.selected]="isImageSelected(actual_profile_picture)" [src]="actual_profile_picture" (click)="selectImage(actual_profile_picture)"></ion-img>
+        <ion-img class="grid_profile_picture" [class.selected]="isImageSelected(photoProfilSpotify)" [src]="photoProfilSpotify" (click)="selectImage(photoProfilSpotify)"></ion-img>
       </ion-col>
       <ion-col size="4" *ngFor="let picture of images">
         <ion-img class="grid_profile_picture" [class.selected]="isImageSelected(picture)" [src]="picture" (click)="selectImage(picture)"></ion-img>
@@ -22,11 +22,14 @@
     </ion-row>
   </ion-grid>
 
-  <input type="file" accept="image/*" (change)="onFileSelected($event)" style="display: none;" #fileInput>
-  <ion-button (click)="fileInput.click()">Sélectionner une image</ion-button>
+  <div class="center-button-container">
+  <ion-input type="text" placeholder="Entrez le lien de l'image" class="element-modal" [(ngModel)]="nouveauLienImage"  #lienInput></ion-input>
+  <ion-button class="element-modal" (click)="mettreAJourPhoto()">Mettre à jour la photo</ion-button>
+  </div>
 
-  <ion-button (click)="validate()">Valider</ion-button>
-  <ion-button (click)="dismiss()">Quitter</ion-button>
-
+  <div class="center-button-container">
+    <ion-button class="element-modal" (click)="validate()">Valider</ion-button>
+    <ion-button class="element-modal" (click)="dismiss()">Quitter</ion-button>
+  </div>
 
 </ion-content>

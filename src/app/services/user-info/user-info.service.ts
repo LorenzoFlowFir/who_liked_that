@@ -201,4 +201,26 @@ export class UserInfoService {
       );
     }
   }
+
+  public async updateUserProfilePicture(idUtilisateur: string, nouvellePhoto: string) {
+    try {
+      
+      const userRef = doc(this.firestore, 'Joueur', idUtilisateur);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        const userData: any = userSnap.data();
+        await setDoc(
+          userRef, 
+          { ...userData, photo_profil: nouvellePhoto },
+          { merge: true });
+          console.log('Photo de profil mise à jour avec succès.');
+      } else {
+        console.error(
+          `Utilisateur ${idUtilisateur} introuvable dans Firestore`
+        );
+      }
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de la photo de profil :', error);
+    }
+  }
 }

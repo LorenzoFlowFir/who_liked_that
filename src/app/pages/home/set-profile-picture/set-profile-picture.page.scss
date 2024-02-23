@@ -10,3 +10,15 @@
 .selected {
     border: yellow 3px solid;
 }
+
+.center-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.element-modal {
+    width: 45%;
+    margin: 0 auto;
+}
