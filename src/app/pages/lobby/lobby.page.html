@@ -1,6 +1,8 @@
 <ion-content>
   <h1 class="text-center">Code d'invitation : {{ partyId }}</h1>
+  <h2 class="text-center">Nombre de manches: {{ numberOfRounds }}</h2>
   <ion-card>
+      
     <ion-card-header>
       <ion-card-title class="ion-text-center">Participants</ion-card-title>
     </ion-card-header>
@@ -34,12 +36,17 @@
     </ion-card-content>
     @if (tailleJoueursErreur) {
     <ion-text color="danger" *ngIf="tailleJoueursErreur" id="error">
-      <p>Il faut au minimum 2 joueurs</p>
+      <p>Il faut au minimum 3 joueurs</p>
     </ion-text>
     }
   </ion-card>
+  
   <div class="button-container ion-text-center">
+    
     <ion-grid>
+      <ion-button *ngIf="isHost" (click)="openPartySettings()" expand="block">
+        Paramètres de la partie
+      </ion-button>
       <ion-row>
         <ion-col size="6">
           <ion-button

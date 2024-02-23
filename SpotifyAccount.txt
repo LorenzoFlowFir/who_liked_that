@@ -8,10 +8,10 @@ username :WhoLikedThatBot
 mail : lorenzofir2903+1@gmail.com
 mdp : WhoLikedThat0002
 
-id : 
-username :
-mail : 
-mdp : 
+id : 31q7rqhqxo2t3w6ogklv7y3d3h6e
+username : WhoLikedThatBot2
+mail : lorenzofir2903+2@gmail.com
+mdp : WhoLikedThat0003
 
 id : 
 username :

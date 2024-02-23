@@ -1,5 +1,5 @@
 // party.page.ts
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserInfoService } from 'src/app/services/user-info/user-info.service';
@@ -30,6 +30,7 @@ import {
   playSharp,
   pauseSharp,
   playSkipForwardSharp,
+  personSharp,
 } from 'ionicons/icons';
 
 @Component({
@@ -82,12 +83,13 @@ export class PartyPage implements OnInit, OnDestroy {
   public votingStarted: boolean = false;
 
   public currentManche: number = 1; // Suivi de la manche actuelle
-  public totalManches: number = 10; // Total des manches
+  public totalManches: number = 0; // Total des manches
 
   public myUserId: string = this.userInfoService.user!.id;
   public myUsername: string = this.userInfoService.user!.nom;
   public playerScores: number = 0;
   private memberGuesses: any;
+  public isTarget: boolean | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -102,6 +104,7 @@ export class PartyPage implements OnInit, OnDestroy {
       playSharp,
       pauseSharp,
       playSkipForwardSharp,
+      personSharp,
     });
   }
 
@@ -117,7 +120,7 @@ export class PartyPage implements OnInit, OnDestroy {
                 //Récupère les informations de la partie (Membres + Sons des Joueurs)
                 this.members = data.members;
                 this.playlists = data.playlists;
-
+                this.totalManches = data.nbDeManches;
                 //Choisi le joueur cible
                 this.targetPlayer = this.mancheService.getRandomPlayer(
                   this.members
@@ -152,6 +155,7 @@ export class PartyPage implements OnInit, OnDestroy {
                     partyId: this.partyId,
                     track: this.targetTrack,
                     player: this.targetPlayer,
+                    nbDeManches: this.totalManches,
                   });
                 }
               });
@@ -160,9 +164,11 @@ export class PartyPage implements OnInit, OnDestroy {
           this.sendTargetTrackSub = this.socketService
             .listen('send-target-track')
             .subscribe((data) => {
+              console.log(data);
               this.targetTrack = data.track;
               this.targetPlayer = data.player;
               this.members = data.members;
+              this.totalManches = data.nbDeManches;
             });
         }
         this.subscriptionsInitialized = true;
@@ -211,6 +217,7 @@ export class PartyPage implements OnInit, OnDestroy {
       this.playerGuesses = {}; // Réinitialiser les suppositions des joueurs
       this.memberGuesses = undefined; // Réinitialiser les suppositions des joueurs
       this.targetPlayer = undefined;
+      this.isTarget = null;
 
       // Si c'est l'hôte, choisissez un nouveau joueur cible et une nouvelle piste
       if (this.isHost && this.partyId) {
@@ -372,6 +379,15 @@ export class PartyPage implements OnInit, OnDestroy {
           }
         }, 5000); // 5 secondes
       }, 15000); // 15 secondes
+    }
+  }
+  
+  // Ajout de la fonction permettant de savoir si le joueur est l'imposteur où non
+  public isTargetPlayer(): void {
+    if (this.isTarget === null) {
+      this.isTarget = this.myUsername === this.targetPlayer?.username;
+    } else if (this.isTarget === true || this.isTarget === false) {
+      this.isTarget = null;
     }
   }
 
