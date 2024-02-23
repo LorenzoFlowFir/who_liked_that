@@ -2,14 +2,23 @@ import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { LikedSongService } from '../../../services/liked-song/liked-song.service';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
 import { User } from '../../../models/user.model';
-import { IonCard, IonImg, IonCardContent } from '@ionic/angular/standalone';
+import { IonCard, 
+  IonImg, 
+  IonCardContent,
+  ModalController, 
+} from '@ionic/angular/standalone';
+import { SetProfilePicturePage } from '../set-profile-picture/set-profile-picture.page';
 
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.scss'],
   standalone: true,
-  imports: [IonCard, IonImg, IonCardContent],
+  imports: [
+    IonCard, 
+    IonImg, 
+    IonCardContent,
+  ],
 })
 export class UserInfoComponent implements OnInit {
   @Input() public accessToken: any;
@@ -19,7 +28,8 @@ export class UserInfoComponent implements OnInit {
 
   constructor(
     public randomlikeService: LikedSongService,
-    public userInfoService: UserInfoService
+    public userInfoService: UserInfoService,
+    private modalController: ModalController,
   ) {}
 
   ngOnInit() {
@@ -52,5 +62,24 @@ export class UserInfoComponent implements OnInit {
           }
         }
       });
+  }
+
+  //Ouverture du modal de modifications de la photo de profil
+  public async showPictureSetModal() {
+    const modal = await this.modalController.create({
+      component: SetProfilePicturePage,
+      componentProps: {
+        actual_profile_picture: this.user?.photo_profil,
+      },
+    });
+
+    await modal.present();
+
+    // Attendre la fermeture du modal pour effectuer une action après sa fermeture (si nécessaire)
+    const { data } = await modal.onDidDismiss();
+    if (data && this.user && this.user.photo_profil !== data) {
+      // Mettez à jour la propriété user?.photo_profil avec la nouvelle photo
+      this.user.photo_profil = data;
+    }
   }
 }

@@ -29,6 +29,9 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'set-profile-picture',
+    loadComponent: () => import('./pages/home/set-profile-picture/set-profile-picture.page').then( m => m.SetProfilePicturePage)
+
     path: 'settings',
     loadComponent: () =>
       import('./pages/main-settings/main-settings.page').then(
