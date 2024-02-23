@@ -15,4 +15,5 @@ export interface User {
   volume_effets_joueur: number;
   volume_musique_joueur: number;
   xp: number;
+  playlists: string;
 }

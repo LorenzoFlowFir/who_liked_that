@@ -91,6 +91,60 @@ export class LikedSongService {
     return allTracks;
   }
 
+  public async fetchPlaylistTracks(
+    playlistId: string,
+    accessToken: string
+  ): Promise<any[]> {
+    this.spotifyWebApi.setAccessToken(accessToken);
+    let tracks: any[] = [];
+    let offset = 0;
+    const limit = 100; // La limite maximale fixée par l'API Spotify pour une requête
+
+    try {
+      let fetchMore = true;
+
+      while (fetchMore) {
+        const response = await this.spotifyWebApi.getPlaylistTracks(
+          playlistId,
+          {
+            offset: offset,
+            limit: limit,
+          }
+        );
+
+        const trackItems = response.items.map((item) => {
+          if ('album' in item.track) {
+            return {
+              id: item.track.id,
+              cover: item.track.album.images[0]
+                ? item.track.album.images[0].url
+                : 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/XEU.jpg/1200px-XEU.jpg',
+              name: item.track.name,
+              artist: item.track.artists[0].name,
+            };
+          } else {
+            return null;
+          }
+        });
+        tracks = tracks.concat(trackItems);
+        offset += limit;
+
+        // Vérifie si on a récupéré toutes les pistes
+        if (!response.next) {
+          fetchMore = false;
+        }
+      }
+
+      return tracks;
+    } catch (error) {
+      console.error(
+        'Erreur lors de la récupération des pistes de la playlist :',
+        error
+      );
+      return []; // Retourne un tableau vide en cas d'erreur
+    }
+  }
+
   //Verifie que l'utilisateur n'a pas un document dans la collection Playlist
   public async VerifierPlaylistExiste(idUtilisateur: string) {
     try {
@@ -138,10 +192,30 @@ export class LikedSongService {
 
       // Utilisez setDoc pour créer le document avec les données de l'utilisateur
       await setDoc(docRef, playlist);
+      console.log(
+        'Playlist bien créée dans la base de données.',
+        `playlist_${playlist.user_id}`
+      );
 
       return true;
     } catch (error) {
       console.error("Erreur lors de la création de l'utilisateur :", error);
+      return false;
+    }
+  }
+
+  //Supprimer un document dans la collection Playlist
+  public async DeletePlaylistInDB(idUtilisateur: string) {
+    try {
+      const docRef = doc(
+        this.firestore,
+        'Playlist',
+        `playlist_${idUtilisateur}`
+      );
+      await setDoc(docRef, { liked_song: [] }, { merge: true });
+      return true;
+    } catch (error) {
+      console.error("Erreur lors de la suppression de l'utilisateur :", error);
       return false;
     }
   }
