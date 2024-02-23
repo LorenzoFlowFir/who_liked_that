@@ -2,7 +2,7 @@
   <ion-header collapse="condense">
     <ion-toolbar>
       <div id="titre-party">
-        <ion-title size="large">Manche : {{currentManche}}/10</ion-title>
+        <ion-title size="large">Manche : {{currentManche}}/{{totalManches}}</ion-title>
 
         <!-- Condition pour afficher le bouton d'indicateur d'imposteur -->
         @if (isTarget == true) {

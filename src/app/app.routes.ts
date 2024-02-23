@@ -28,4 +28,18 @@ export const routes: Routes = [
         (m) => m.ClassementPage
       ),
   },
+  {
+    path: 'settings',
+    loadComponent: () =>
+      import('./pages/main-settings/main-settings.page').then(
+        (m) => m.MainSettingsPage
+      ),
+  },
+  {
+    path: 'main-settings',
+    loadComponent: () =>
+      import('./pages/main-settings/main-settings.page').then(
+        (m) => m.MainSettingsPage
+      ),
+  },
 ];

@@ -22,11 +22,12 @@ export class UserInfoService {
   firestore: Firestore = inject(Firestore);
   private currentUser: User | undefined;
   private randomAvatarNumber = Math.floor(Math.random() * 8);
+  public allPlaylists: any[] = [];
 
   constructor(private socketService: SocketService) {}
 
   //Récupere les infos de l'utilisateur depuis son compte Spotify
-  public async getInfoPersonnelUtilisateur(accessToken: string) {
+  public async getInfoPersonnelUtilisateur(accessToken: string): Promise<any> {
     this.spotifyWebApi.setAccessToken(accessToken);
 
     try {
@@ -40,6 +41,57 @@ export class UserInfoService {
       );
       return error;
     }
+  }
+
+  //Récupérer toutes les playlist d'un utilisateur
+  async fetchAllPlaylists(
+    accessToken: any,
+    offset = 0,
+    limit = 50,
+    playlists: any[] = []
+  ): Promise<any> {
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    try {
+      const response = await fetch(
+        `https://api.spotify.com/v1/me/playlists?offset=${offset}&limit=${limit}`,
+        { headers }
+      );
+      const data = await response.json();
+
+      if (!data.items) {
+        console.log('Aucune playlist trouvée');
+        return [];
+      }
+      playlists.push(...data.items);
+      if (data.next) {
+        return await this.fetchAllPlaylists(
+          accessToken,
+          offset + limit,
+          limit,
+          playlists
+        );
+      } else {
+        this.allPlaylists = playlists;
+        return playlists;
+      }
+    } catch (error: any) {
+      if (error.status === 429) {
+        const retryAfter = error.headers.get('Retry-After'); // Obtenir la valeur du délai
+        await new Promise((resolve) =>
+          setTimeout(resolve, parseInt(retryAfter) * 1000)
+        );
+      } else {
+        console.error(error);
+      }
+    }
+  }
+
+  async getAllPlaylist(accessToken: any) {
+    this.allPlaylists = await this.fetchAllPlaylists(accessToken);
+    return this.allPlaylists;
   }
 
   //Créer un utilisateur
@@ -66,6 +118,7 @@ export class UserInfoService {
         volume_effets_joueur: 0,
         volume_musique_joueur: 0,
         xp: 0,
+        playlists: userProfile.playlists,
       };
       this.user = user;
       return user;
@@ -76,6 +129,32 @@ export class UserInfoService {
         userProfile
       );
       return new Error("Erreur lors de la création de l'utilisateur");
+    }
+  }
+
+  //change la playlist de l'utilisateur dans la db
+  public async changePlaylist(idUtilisateur: string, playlist: string) {
+    try {
+      const userRef = doc(this.firestore, 'Joueur', idUtilisateur);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const userData: any = userSnap.data();
+        await setDoc(
+          userRef,
+          { ...userData, playlists: playlist },
+          { merge: true }
+        );
+      } else {
+        console.error(
+          `Utilisateur ${idUtilisateur} introuvable dans Firestore`
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Erreur lors de la mise à jour de la playlist de l'utilisateur :",
+        error
+      );
     }
   }
 

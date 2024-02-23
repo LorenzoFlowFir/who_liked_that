@@ -1,5 +1,5 @@
 // party.page.ts
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserInfoService } from 'src/app/services/user-info/user-info.service';
@@ -83,7 +83,7 @@ export class PartyPage implements OnInit, OnDestroy {
   public votingStarted: boolean = false;
 
   public currentManche: number = 1; // Suivi de la manche actuelle
-  public totalManches: number = 10; // Total des manches
+  public totalManches: number = 0; // Total des manches
 
   public myUserId: string = this.userInfoService.user!.id;
   public myUsername: string = this.userInfoService.user!.nom;
@@ -120,7 +120,7 @@ export class PartyPage implements OnInit, OnDestroy {
                 //Récupère les informations de la partie (Membres + Sons des Joueurs)
                 this.members = data.members;
                 this.playlists = data.playlists;
-
+                this.totalManches = data.nbDeManches;
                 //Choisi le joueur cible
                 this.targetPlayer = this.mancheService.getRandomPlayer(
                   this.members
@@ -155,6 +155,7 @@ export class PartyPage implements OnInit, OnDestroy {
                     partyId: this.partyId,
                     track: this.targetTrack,
                     player: this.targetPlayer,
+                    nbDeManches: this.totalManches,
                   });
                 }
               });
@@ -163,9 +164,11 @@ export class PartyPage implements OnInit, OnDestroy {
           this.sendTargetTrackSub = this.socketService
             .listen('send-target-track')
             .subscribe((data) => {
+              console.log(data);
               this.targetTrack = data.track;
               this.targetPlayer = data.player;
               this.members = data.members;
+              this.totalManches = data.nbDeManches;
             });
         }
         this.subscriptionsInitialized = true;
